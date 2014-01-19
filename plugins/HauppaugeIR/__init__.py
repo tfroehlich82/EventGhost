@@ -28,7 +28,7 @@
 eg.RegisterPlugin(
     name        = "Hauppauge IR",
     author      = "Stefan Gollmer",
-    version     = "1.04." + "$LastChangedRevision$".split()[1],
+    version     = "1.04.1093",
     kind        = "remote",
     guid        = "{B54E7F32-E117-4C24-A892-9D69BC290568}",
     description = (

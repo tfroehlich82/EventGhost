@@ -2,7 +2,7 @@
 eg.RegisterPlugin(
     name = "Timer",
     author = "Bartman",
-    version = "1.0." + "$LastChangedRevision$".split()[1],
+    version = "1.0.1430",
     guid = "{6149CA99-1FCD-4450-9160-7543BC20CFD3}",
     description = (
         "Triggers an event after an adjustable time and optionally repeats it "

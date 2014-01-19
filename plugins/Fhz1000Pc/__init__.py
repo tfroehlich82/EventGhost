@@ -27,7 +27,7 @@ eg.RegisterPlugin(
     kind="external",
     author="Bitmonster",
     guid="{463CB248-A4CB-4EF0-B1FE-F35895A2D4F2}",
-    version = "1.0." + "$LastChangedRevision$".split()[1],    
+    version = "1.0.1246",
 )
 
 import wx

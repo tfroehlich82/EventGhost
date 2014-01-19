@@ -35,8 +35,8 @@ eg.RegisterPlugin(
         u'\n\n<p>'
         u'<center><img src="picture.jpg" /></a></center>'
     ),
-    version = "1.0."+ "$LastChangedRevision: 1 $".split()[1],
 	kind = "remote",
+    version = "1.0.1",
     guid = "{BAD86ECC-5B21-4F47-9ADE-9CC8FFF8D191}",
     canMultiLoad = True,
     author = "Melloware Inc",

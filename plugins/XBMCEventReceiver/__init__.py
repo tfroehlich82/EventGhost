@@ -41,7 +41,7 @@ import eg
 eg.RegisterPlugin(
     name = "XBMC Event Receiver",
     author = "vortexrotor <vortexrotor@vortexbb.com",
-    version = "2.0." + "$LastChangedRevision: 5 $".split()[1],
+    version = "2.0.5",
     kind = "program",
     guid = "{9872BD49-2022-4F1B-B362-85F1ED203B7E}",
     description = (

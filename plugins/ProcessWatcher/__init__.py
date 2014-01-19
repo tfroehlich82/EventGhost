@@ -18,7 +18,7 @@
 eg.RegisterPlugin(
     name = "Process Watcher",
     author = "Bitmonster & DranDane",
-    version = "1.0.",
+    version = "1.0.0",
     guid = "{82BADF9F-D809-4EBC-A540-CCBF7563F8DF}",
     description = (
         "Generates events if a process is created or destoyed"

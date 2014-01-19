@@ -20,7 +20,7 @@ eg.RegisterPlugin(
     description = "This plug in is for controlling JVC DILA projectors via RS-232",
     kind = "external",
     author = "Bartman",
-    version = "0.1.", # + "$LastChangedRevision$".split()[1],
+    version = "0.1.0",
     canMultiLoad = True,
     createMacrosOnAdd = True,
     url = "http://www.eventghost.net/forum/viewtopic.php?t=650",

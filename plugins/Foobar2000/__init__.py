@@ -26,7 +26,6 @@
 eg.RegisterPlugin(
     name = "Foobar2000",
     author = "MonsterMagnet",
-#    version = "1.3." + "$LastChangedRevision$".split()[1],
     version = "1.3.1423",
     kind = "program",
     guid = "{50257196-DB5B-4291-BD62-FF3DE53DDCA2}",

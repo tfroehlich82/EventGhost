@@ -35,7 +35,7 @@ are enabled in VLC!
 eg.RegisterPlugin(
     name = "VLC media player",
     author = "MonsterMagnet",
-    version = "0.4." + "$LastChangedRevision$".split()[1],
+    version = "0.4.1486",
         kind = "program",
     guid = "{02929D1C-7567-414C-84D1-F8D71D6FD7B3}",
     canMultiLoad = True,
