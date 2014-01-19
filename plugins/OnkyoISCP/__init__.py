@@ -42,7 +42,7 @@ class Text:
         command = "Code to send:"
 
 class OnkyoISCP(eg.PluginBase):
-    text = Text
+    text       = Text
     header     = 'ISCP'
     headersize = 16
     version    = 1
@@ -61,7 +61,7 @@ class OnkyoISCP(eg.PluginBase):
 	if hasattr(self, 'stopThreadEvent'):
 	    self.stopThreadEvent.set()
 
-    	self.socket.close()
+        self.socket.close()
 
     def Receive(self):
         while not self.stopThreadEvent.is_set():
@@ -112,7 +112,7 @@ class OnkyoISCP(eg.PluginBase):
         ip = self.ip
         port = self.port
         try:
-	        s.connect((ip, port))
+            s.connect((ip, port))
         except Exception as e:
             self.PrintError("OnkyoISCP: Failed to connect to " + ip + ":" + str(port) + ": " + str(e))
         else:

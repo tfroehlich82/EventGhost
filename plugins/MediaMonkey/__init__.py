@@ -542,7 +542,7 @@ class MediaMonkeyWorkerThread(eg.ThreadWorker):
                 TriggerEvent = self.plugin.TriggerEvent
             self.EventHandler = SubEventHandler
             self.events = DispatchWithEvents(self.MM, self.EventHandler)
-            
+
 
     def Finish(self):
         """
@@ -1353,7 +1353,7 @@ class MediaMonkey(eg.PluginBase):
     def checkWinOpened(self):
         hwnds = MM_WindowMatcher()
         if hwnds:
-            dummy = SendMessageTimeout(hwnds[0],WM_SYSCOMMAND,SC_MINIMIZE,20)
+            dummy = SendMessageTimeout(hwnds[0], WM_SYSCOMMAND, SC_MINIMIZE, 20)
             self.checkOpened = None
         else:
             self.checkOpened = eg.scheduler.AddTask(1, self.checkWinOpened)
@@ -1365,7 +1365,7 @@ class MediaMonkey(eg.PluginBase):
         except:
             return False
 
-        
+
     def checkIsRunning(self):
         self.checkTask = eg.scheduler.AddTask(2, self.checkIsRunning) # must run continuously !
         if not self.isRunning():
@@ -1373,7 +1373,7 @@ class MediaMonkey(eg.PluginBase):
                     self.manFlg = False
                     self.stopFlg = False
                     self.autoFlg = False
-                self.StopThreads()
+                    self.StopThreads()
         elif not self.autoFlg:
             if not self.manFlg:
                 self.manFlg = True
@@ -1381,8 +1381,8 @@ class MediaMonkey(eg.PluginBase):
 
 
     def startWorkerThread(self):
-            self.workerThread = MediaMonkeyWorkerThread(self, True)
-            self.workerThread.Start(1000.0)
+        self.workerThread = MediaMonkeyWorkerThread(self, True)
+        self.workerThread.Start(1000.0)
 
 
     def Configure(self, events = 4 * [True] + 23 * [False], events2 = 8*[True]):
@@ -1496,7 +1496,7 @@ class MediaMonkey(eg.PluginBase):
             res = self.workerThread.CallWait(partial(
                 self.workerThread.DeleteSongFromLibrary,
                 ID,
-            ),1000)
+            ), 1000)
             return res
 
 
@@ -1550,12 +1550,12 @@ class Exit(eg.ActionBase):
     
     def __call__(self, choice = None):
         hwnds = MM_WindowMatcher()
-            if hwnds:
+        if hwnds:
             self.plugin.stopFlg = True
             self.plugin.StopThreads()
-                CloseHwnd(hwnds[0])
-            else:
-                raise self.Exceptions.ProgramNotRunning
+            CloseHwnd(hwnds[0])
+        else:
+            raise self.Exceptions.ProgramNotRunning
 
 
     def GetLabel(self):
@@ -2225,7 +2225,7 @@ class GetSongInfo(eg.ActionBase):
         shuffle = self.plugin.GetValue('isShuffle')
         if not shuffle or self.value == 0:
             try:
-            SongData,ix = self.plugin.GetSongData(self.value)
+                SongData, ix = self.plugin.GetSongData(self.value)
             except:
                 return None
             if (SongData, ix) == (None, None):
@@ -2254,7 +2254,7 @@ class GetSongInfo(eg.ActionBase):
                 "Conductor",
                 "Comment"
             )
-            for propert,cond in zip(listPropert,arrayInfo[2:]):
+            for propert, cond in zip(listPropert, arrayInfo[2:]):
                 if cond:
                     result.append(SongData[propert])
             if arrayInfo[16]:
@@ -2263,7 +2263,7 @@ class GetSongInfo(eg.ActionBase):
                 if sep == '':
                     sep = '\n'
                 return sep.join(result)
-        else:
+            else:
                 return result
         else:
             return self.text.shuffleON
@@ -3266,7 +3266,7 @@ class LoadPlaylistByFilter(eg.ActionBase):
         choicesS=choices[:]
         choicesS.sort()
         
-        listRules2=[] #working copy (after Cancel flush it)
+        listRules2 = [] #working copy (after Cancel flush it)
         for i in range(0,len(listRules)):
             listRules2.append(listRules[i][:])
         maxRules=10
@@ -3598,7 +3598,7 @@ class LoadPlaylistByFilter(eg.ActionBase):
                 if self.i==maxRules:
                     for x in range(0,maxRules):
                         self.mySizer.FindItemAtPosition((x,3)).GetWindow().Enable(False)
-            panel.EnableButtons(False) #New row is empty => allways not valid
+            panel.EnableButtons(False) # New row is empty => allways not valid
 
         def OnRemoveButton(evt):
             """Event handler for the button '-' click."""

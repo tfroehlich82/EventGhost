@@ -30,10 +30,10 @@ eg.RegisterPlugin(
     kind = "program",
     guid = "{50257196-DB5B-4291-BD62-FF3DE53DDCA2}",
     description = (
-        'Adds actions to control the <a href="http://www.foobar2000.org/">'
+        'Adds actions to control the <a href="http://www.foobar2000.net/">'
         'Foobar2000</a> audio player.<br />'
 	'<br />'
-	'For v1.0 you need I <a href="http://foosion.foobar2000.org/components/?id=runcmd">foosion\'s Run Command (foo_runcmd) plugin</a>.'
+	'For v1.0 you need I <a href="http://foosion.foobar2000.net/components/?id=runcmd">foosion\'s Run Command (foo_runcmd) plugin</a>.'
     ),
     createMacrosOnAdd = True,
     url = "http://www.eventghost.net/forum/viewtopic.php?t=695",

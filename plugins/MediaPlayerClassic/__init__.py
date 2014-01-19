@@ -76,7 +76,6 @@ eg.RegisterPlugin(
         'Adds actions to control '
         '<br><a href="http://mpc-hc.sourceforge.net/">'
         'Media Player Classic - Home Cinema</a>.'
-
     ),
     help = """
         For proper functioning of this plugin should be used
@@ -122,7 +121,7 @@ from sys import getfilesystemencoding
 FSE = getfilesystemencoding()
 from eg.Classes.MainFrame.TreeCtrl import DropTarget as EventDropTarget
 
-GWL_EXSTYLE = -20
+GWL_EXSTYLE      = -20
 WS_EX_WINDOWEDGE = 0x00000100
 WM_INITMENUPOPUP = 0x0117
 MF_GRAYED        = 1
@@ -537,7 +536,7 @@ class EventListCtrl(wx.ListCtrl):
 
     def OnDeleteButton(self, event=None):
         self.DeleteItem(self.sel)
-        self.evtList[self.ix].pop(self.sel)
+        self.evtList[self.ix].pop(self.sel)       
         evt = eg.ValueChangedEvent(self.id, value = self)
         wx.PostEvent(self, evt)
         if event:
@@ -729,7 +728,7 @@ class GoToFrame(wx.Frame):
         gotoSize = self.GoToCtrl.GetTextExtent(data)
         wx.CallAfter(self.UpdateOSD, data)
         if sizeFlag:
-            gotoSize = (1.4*gotoSize[0],gotoSize[1])
+            gotoSize = (1.4 * gotoSize[0],gotoSize[1])
         self.GoToCtrl.SetSize(gotoSize)
         self.GoToCtrl.SetPosition((border, 1.5*border+labelSize[1]))
         self.SetSize((4+gotoSize[0]+2*border,2+labelSize[1]+gotoSize[1]+2.5*border))
@@ -1414,12 +1413,12 @@ You can of course also use an expression such as **{eg.result}** or **{eg.event.
 
     def __call__(self, val=""):
         if self.plugin.runFlg and self.plugin.mpcHwnd:
-        try:
-            val = eg.ParseString(val)
-            val = int(val)
-        except:
-            raise self.Exception(self.text.error % val)
-            return
+            try:
+                val = eg.ParseString(val)
+                val = int(val)
+            except:
+                raise self.Exception(self.text.error % val)
+                return
             return SendMessage(self.plugin.mpcHwnd, WM_COMMAND, val, 0)
         else:
             raise self.Exceptions.ProgramNotRunning
@@ -1439,9 +1438,7 @@ class ActionPrototype(eg.ActionBase):
     
     def __call__(self):
         if self.plugin.runFlg and self.plugin.mpcHwnd:
-            return SendMessage(self.plugin.mpcHwnd, WM_COMMAND, self.value, 0)
-        else:
-            raise self.Exceptions.ProgramNotRunning
+            wx.CallAfter(SendMessage,self.plugin.mpcHwnd, WM_COMMAND, self.value, 0)
 #===============================================================================
 
 class GetWindowState(eg.ActionBase):
@@ -1563,7 +1560,7 @@ class GetTimes(eg.ActionBase):
 
     def __call__(self):
         if self.plugin.runFlg and self.plugin.mpcHwnd:
-        try:
+            try:
                 child = GetDlgItem(self.plugin.mpcHwnd, 10021)
                 if GetClassName(child) ==  "#32770":
                     statText = GetDlgItem(child, 12027)
@@ -1883,7 +1880,7 @@ class GoTo_OSD(eg.ActionBase):
                         self.plugin,
                         self.event,
                         displayChoice.GetSelection(),
-                            self.plugin.mpcHwnd,
+                        self.plugin.mpcHwnd,
                         panel.evtList,
                         self.sizeFlag
                     )
@@ -2240,7 +2237,7 @@ class Run(eg.ActionBase):
 
     def __call__(self):
         if self.plugin.mpcPath:
-            self.plugin.StartMpcHc()        
+            self.plugin.ConnectMpcHc()        
 #===============================================================================
 
 class MediaPlayerClassic(eg.PluginBase):
@@ -2288,9 +2285,9 @@ class MediaPlayerClassic(eg.PluginBase):
         cmd = cpyData.contents.dwData
         msg = wstring_at(cpyData.contents.lpData)
         if cmd == CMD_CONNECT:
-            self.connected = True
             self.mpcHwnd = int(msg)
-            eg.PrintNotice("MPC-HC connected %i" % self.mpcHwnd)
+            self.connected = True
+            eg.TriggerEvent("Connected",prefix="MPC-HC")
         elif cmd == CMD_STATE:
             state = int(msg)
             if self.state != state:
@@ -2364,8 +2361,8 @@ class MediaPlayerClassic(eg.PluginBase):
         self.mySched=eg.scheduler.AddTask(2, self.mpcIsRunning) # must run continuously !
         if not self.isRunning(): #user closed MPC-HC ?
             if self.runFlg and self.connected:
-                self.runFlg = False
-                self.connected = False
+                    self.runFlg = False
+                    self.connected = False
                     self.strtFlg = False
                     self.myStart = None
                     self.mpcHwnd = None
@@ -2459,10 +2456,10 @@ class MediaPlayerClassic(eg.PluginBase):
         while panel.Affirmed():
             panel.SetResult(filepathCtrl.GetValue())
 
-        
+
     def GetMpcHcPath(self):
         """
-        Get the path of Foobar2000's installation directory through querying 
+        Get the path of MPC-HC's installation directory through querying 
         the Windows registry.
         """
         try:
@@ -2473,7 +2470,6 @@ class MediaPlayerClassic(eg.PluginBase):
             mpc = _winreg.OpenKey(*args)
             mpcPath =_winreg.QueryValueEx(mpc, "ExePath")[0]
             _winreg.CloseKey(mpc)
-            mpcPath = join(mpcPath, "mpc-hc.exe")
         except WindowsError:
             mpcPath = None
         return mpcPath

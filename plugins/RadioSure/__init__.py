@@ -3075,8 +3075,8 @@ class ObservationThread:
 
 
     def RS_ObservationThread(self):
-            hwnd = HandleRS()
-            if hwnd:
+        hwnd = HandleRS()
+        if hwnd:
             if self.evtName:
                 data = GetWindowText(hwnd[0]).decode(eg.systemEncoding)
                 if data != self.oldData and data != "Radio? Sure!":
@@ -3090,7 +3090,7 @@ class ObservationThread:
         if self.alive:
             self.task = eg.scheduler.AddTask(self.period, self.RS_ObservationThread)
 
-
+    
     def start(self):
         self.alive = True
         self.RS_ObservationThread()
@@ -3539,7 +3539,7 @@ class MenuEventsDialog(wx.MiniFrame):
 class Menu(wx.Frame):
 
     def __init__(
-            self,
+        self,
         fore,
         back,
         foreSel,
@@ -3635,7 +3635,7 @@ class Menu(wx.Frame):
         if self.flag:
             self.timer=MyTimer(t = 5.0, plugin = self.plugin)
         self.menuGridCtrl.Set(self.items)
-        self.UpdateMenu(ix == 0, ix)    
+        self.UpdateMenu(ix == 0, ix)
         self.plugin.menuDlg = self
         wx.Yield()
         SetEvent(event)
@@ -3699,7 +3699,7 @@ class Menu(wx.Frame):
             #self.items = self.plugin.GetItemList(self.hWnd, self.menu)
         self.choices = [item[0] for item in self.items]
         self.menuGridCtrl.Set(self.items)
-        self.DrawMenu(ix)    
+        self.DrawMenu(ix)  
 
 
     def MoveCursor(self, step):
@@ -3973,7 +3973,7 @@ class RadioSure(eg.PluginBase):
             mainWindow = language.getElementsByTagName('MainWindow')
             res['stop'] = mainWindow[0].getElementsByTagName('Stop')[0].firstChild.data            
             res['unmute'] = mainWindow[0].getElementsByTagName('Unmute')[0].firstChild.data            
-            res['stopRec'] = mainWindow[0].getElementsByTagName('StopRecording')[0].firstChild.data
+            res['stopRec'] = mainWindow[0].getElementsByTagName('StopRecording')[0].firstChild.data           
             return res
 
 
@@ -5181,6 +5181,20 @@ class SendMessageActions(eg.ActionBase):
             return self.plugin.text.text1
 #===============================================================================
 
+class MinimRest(eg.ActionBase):
+    def __call__(self):
+        hwnd = HandleRS()
+        if hwnd:
+            winState = GetWindowPlacement(hwnd[0])[1]
+            if winState == 1:
+                SendMessage(hwnd[0], WM_COMMAND, 1075, 0)
+            elif winState == 2:
+                SendMessage(hwnd[0], WM_SYSCOMMAND, SC_RESTORE, 0)
+        else:
+            self.PrintError(self.plugin.text.text1)
+            return self.plugin.text.text1
+#===============================================================================
+
 class CheckAndChange(eg.ActionBase):
     def __call__(self):
         hwnd = HandleRS()
@@ -5456,19 +5470,19 @@ If the string is empty, the event is not triggered."""
         evtName2 ="station",
     ):
         if evtName or evtName2:
-        if self.plugin.observThread:
-            ot = self.plugin.observThread
-            if ot.isAlive():
-                ot.AbortObservation()
-            del self.plugin.observThread
-        ot = ObservationThread(
-            period,
-            evtName,
+            if self.plugin.observThread:
+                ot = self.plugin.observThread
+                if ot.isAlive():
+                    ot.AbortObservation()
+                del self.plugin.observThread
+            ot = ObservationThread(
+                period,
+                evtName,
                 evtName2,
                 self.plugin
-        )
-        ot.start()
-        self.plugin.observThread = ot
+            )
+            ot.start()
+            self.plugin.observThread = ot
 
 
     def GetLabel(
@@ -6102,7 +6116,8 @@ ACTIONS = (
     (eg.ActionGroup, 'Window', 'Window', 'Window',(
         (SendMessageActions,"Minimize","Minimize window","Minimize window.",2),
         (WindowControl,"Restore","Restore window","Restore window.",SC_RESTORE),
-        (SendMessageActions,"MinimRest","Minimize/Restore","Minimize/Restore window.",1075),
+#        (SendMessageActions,"MinimRest","Minimize/Restore","Minimize/Restore window.",1075),
+        (MinimRest,"MinimRest","Minimize/Restore","Minimize/Restore window.",None),
         (SendMessageActions,"Expand","Collapse/Expand window","Collapse/Expand window.",1076),
         (SendMessageActions,"OnTop","Stay on top On/Off","Stay on top On/Off.",1077),
     )),

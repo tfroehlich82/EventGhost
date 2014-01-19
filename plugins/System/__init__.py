@@ -626,7 +626,8 @@ class SetClipboard(eg.ActionWithStringParameter):
         def Do():
             if wx.TheClipboard.Open():
                 tdata = wx.TextDataObject(self.clipboardString)
-                wx.TheClipboard.SetData(tdata)
+                wx.TheClipboard.Clear()
+                wx.TheClipboard.AddData(tdata)
                 wx.TheClipboard.Close()
                 wx.TheClipboard.Flush()
             else:
@@ -979,7 +980,6 @@ class ToggleMute(eg.ActionBase):
             panel.SetResult(deviceCtrl.GetStringSelection())
 
 
-
 class GetMute(eg.ActionBase):
     name = "Get Mute Status"
     iconFile = "icons/SoundCard"
@@ -1005,7 +1005,6 @@ class GetMute(eg.ActionBase):
         panel.AddLine("Device:", deviceCtrl)
         while panel.Affirmed():
             panel.SetResult(deviceCtrl.GetStringSelection())
-
 
 
 class SetMasterVolume(eg.ActionBase):
@@ -1371,7 +1370,7 @@ class ShowPictureFrame(wx.Frame):
         self.timer = Timer(2.0, self.HideCursor)
 
 
-    def SetPicture(self, picturePath=None, display=0):
+    def SetPicture(self, picturePath = None, display = 0):
         if not picturePath:
             return
         width_ = GetMonitorDimensions()[display][2]

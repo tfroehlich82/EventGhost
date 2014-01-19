@@ -33,7 +33,6 @@ eg.RegisterPlugin(
 import wx
 import time
 import os
-from functools import partial
 import wx.lib.masked as masked
 from eg.WinApi.Dynamic import (
     byref, 

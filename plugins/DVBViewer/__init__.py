@@ -79,9 +79,9 @@ def GetHelp():
         msg = "Error reading help file " + HELPFILE + ", error=" + unicode(exc)
         eg.PrintTraceback(msg)
         return msg
- 
+
 HELP = GetHelp()
- 
+
 eg.RegisterPlugin(
     name = "DVBViewer",
     author = "Bitmonster & Stefan Gollmer & Nativityplay & Daniel Brugger",
@@ -118,7 +118,7 @@ eg.RegisterPlugin(
 )
 
 
-CALLWAIT_TIMEOUT  =  60.0
+CALLWAIT_TIMEOUT  = 60.0
 TERMINATE_TIMEOUT = 120
 DUMMY_ACTION      = 27536
 ACCOUNT_CHOICES   = ['DVBService','Task scheduler']
@@ -507,9 +507,9 @@ class Text:
     serviceAddress        = "Address and Web port"
     serviceEvent          = "Source event name"
 
-    serviceDVBViewer      = " By DVBViewer"
-    serviceDVBService     = " By DVBViewerService"
-    serviceUpdate         = " Update from DVBViewerService"
+    serviceDVBViewer      = "By DVBViewer"
+    serviceDVBService     = "By DVBViewerService"
+    serviceUpdate         = "Update from DVBViewerService"
 
 
     class Start :
@@ -3122,8 +3122,8 @@ class CloseDVBViewer( eg.ActionClass ) :
         panel.AddLine( checkBox )
 
         while panel.Affirmed():
-             waitForTermination = checkBox.GetValue()
-             panel.SetResult( waitForTermination )
+            waitForTermination = checkBox.GetValue()
+            panel.SetResult( waitForTermination )
         return True
 
 
@@ -3231,9 +3231,9 @@ class GetRecordingsIDs( eg.ActionClass ) :
         getFlags = plugin.ServiceConfigure(  enableDVBViewer, enableDVBService, updateDVBService, affirmed = False, panel = panel )
 
         while panel.Affirmed():
-             active      = checkBox.GetValue()
-             enableDVBViewer, enableDVBService, updateDVBService = getFlags()
-             panel.SetResult( active, enableDVBViewer, enableDVBService, updateDVBService )
+            active = checkBox.GetValue()
+            enableDVBViewer, enableDVBService, updateDVBService = getFlags()
+            panel.SetResult( active, enableDVBViewer, enableDVBService, updateDVBService )
         return True
 
 
@@ -3788,14 +3788,14 @@ class GetSetupValue( eg.ActionClass ) :
         panel.AddLine( self.text.default, defaultCtrl )
 
         while panel.Affirmed():
-             section      = sectionCtrl.GetValue()
-             name         =    nameCtrl.GetValue()
-             default      = defaultCtrl.GetValue()
+            section      = sectionCtrl.GetValue()
+            name         =    nameCtrl.GetValue()
+            default      = defaultCtrl.GetValue()
+            
+            panel.SetResult( section, name, default )
 
-             panel.SetResult( section, name, default )
 
 # TODO: re-implement using action 'GetTimerDetails' (simplifies a lot)
-
 class GetDateOfRecordings( eg.ActionClass ) :
 
     @eg.LogItWithReturn
@@ -3836,7 +3836,7 @@ class GetDateOfRecordings( eg.ActionClass ) :
                         continue
                         
                     t = toDateTime( record[TI_5_DATE], record[TI_6_STARTTIME] )
-                            
+
                     if t < now :
                         continue
                     if not t in timerDates :
@@ -3870,7 +3870,7 @@ class GetDateOfRecordings( eg.ActionClass ) :
         getFlags = plugin.ServiceConfigure(  enableDVBViewer, enableDVBService, updateDVBService, affirmed = False, panel = panel )
 
         while panel.Affirmed():
-             allRecordings      = checkBox.GetValue()
+            allRecordings      = checkBox.GetValue()
             enableDVBViewer, enableDVBService, updateDVBService = getFlags()
             panel.SetResult( allRecordings, enableDVBViewer, enableDVBService, updateDVBService )
 
@@ -4007,7 +4007,7 @@ class GetTimerDetails( eg.ActionClass ) :
             allRecordings = allRecCB.GetValue()
             enabled = enabledCB.GetValue()
             active = activeCB.GetValue()
-             enableDVBViewer, enableDVBService, updateDVBService = getFlags()
+            enableDVBViewer, enableDVBService, updateDVBService = getFlags()
             panel.SetResult( allRecordings, enableDVBViewer, enableDVBService, updateDVBService, enabled, active )
 
 
@@ -5591,17 +5591,17 @@ class DVBViewerService() :
                 <Timer Type="1" ID="{FE6AA9F3-1A14-403F-9F3D-13B726A06624}" Enabled="-1" 
                     Priority="20" Charset="0" Date="01.03.2012" Start="20:55:00" Dur="85" End="22:20:00" Days="---T---" Action="0">
                   <Descr>Einstein</Descr>
-                   <Options AdjustPAT="-1"/>
+                  <Options AdjustPAT="-1"/>
                   <Format>1</Format>
-                   <Folder>Auto</Folder>
+                  <Folder>Auto</Folder>
                   <NameScheme>%year_%date_%time_%station_%event</NameScheme>
                   <Series>Einstein</Series>
                   <Channel ID="3431745497999804388|SF 1 (deu)"/>
-                   <Executeable>-1</Executeable>
+                  <Executeable>-1</Executeable>
                   <Recording>0</Recording>
                   <ID>3</ID>
                   <GUID>{FE6AA9F3-1A14-403F-9F3D-13B726A06624}</GUID>
-               </Timer>
+                </Timer>
             </Timers>
             """
 
@@ -5663,7 +5663,7 @@ class DVBViewerService() :
 
                 if enabled and not tStart in self.timerDates:
                     self.timerDates.append(tStart)
-                        if recording :
+                    if recording :
                         self.activeTimerDates.append(tStart)
                     #print "date = ", ctime(tStart)
 

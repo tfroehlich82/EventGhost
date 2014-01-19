@@ -1,4 +1,3 @@
-
 eg.RegisterPlugin(
     name = "Meedio",
     author = "jorel1969",

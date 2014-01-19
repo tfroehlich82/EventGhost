@@ -124,6 +124,6 @@ class Auvisio(eg.PluginBase):
             if data[0] == 1 and data[1] == 0:
                 self.TriggerEvent(BUTTONS2[data])
             else:
-            self.TriggerEnduringEvent(BUTTONS2[data])
+                self.TriggerEnduringEvent(BUTTONS2[data])
         else:
             self.EndLastEvent()
