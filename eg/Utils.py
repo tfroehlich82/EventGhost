@@ -379,30 +379,6 @@ def PrepareDocstring(docstring):
     return "\n".join(lines)
 
 
-def GetFirstParagraph(text):
-    """
-    Return the first paragraph of a description string.
-
-    The string can be encoded in HTML or reStructuredText.
-    The paragraph is returned as HTML.
-    """
-    text = text.lstrip()
-    pos = text.find("<rst>")
-    if pos != -1:
-        text = text[pos+5:]
-        text = DecodeReST(text)
-        start = text.find("<p>")
-        end = text.find("</p>")
-        return text[start+3:end].replace("\n", " ")
-    else:
-        result = ""
-        for line in text.splitlines():
-            if line == "":
-                break
-            result += " " + line
-        return ' '.join(result.split())
-
-
 def SplitFirstParagraph(text):
     """
     Split the first paragraph of a description string.
