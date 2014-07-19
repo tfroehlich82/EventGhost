@@ -84,6 +84,7 @@ class MyBuilder(builder.Builder):
         "wx.tools.XRCed",
         "wx.lib.plot", # needs NumPy
         "wx.lib.floatcanvas", # needs NumPy
+        "wx.build.config",
 
         "ImageTk", # py2exe seems to hang if not removed
         "ImageGL",
