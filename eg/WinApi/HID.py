@@ -633,7 +633,7 @@ def GetDevicePath(
                 if item.devicePath == devicePath or (useDeviceIndex and deviceIndex == found):
                     #found right device
                     return item.devicePath
-                found = found + 1
+                found += 1
                 device = item
 
     if found == 1:

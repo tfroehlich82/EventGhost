@@ -407,7 +407,7 @@ class PythonEditorCtrl(StyledTextCtrl):
                 if expanding:
                     self.SetFoldExpanded(lineNum, True)
                     lineNum = self.Expand(lineNum, True)
-                    lineNum = lineNum - 1
+                    lineNum -= 1
                 else:
                     lastChild = self.GetLastChild(lineNum, -1)
                     self.SetFoldExpanded(lineNum, False)
@@ -415,12 +415,12 @@ class PythonEditorCtrl(StyledTextCtrl):
                     if lastChild > lineNum:
                         self.HideLines(lineNum+1, lastChild)
 
-            lineNum = lineNum + 1
+            lineNum += 1
 
 
     def Expand(self, line, doExpand, force=False, visLevels=0, level=-1):
         lastChild = self.GetLastChild(line, level)
-        line = line + 1
+        line += 1
 
         while line <= lastChild:
             if force:
@@ -443,7 +443,7 @@ class PythonEditorCtrl(StyledTextCtrl):
                     flag = doExpand and self.GetFoldExpanded(line)
                     line = self.Expand(line, flag, force, visLevels-1)
             else:
-                line = line + 1
+                line += 1
 
         return line
 
@@ -461,7 +461,7 @@ class PythonEditorCtrl(StyledTextCtrl):
             self.ReplaceTarget(textRange.rstrip())
 
         #Look at last line
-        pos = pos - 1
+        pos -= 1
         clinenumber = self.LineFromPosition(pos)
 
         linenumber = clinenumber
@@ -485,7 +485,7 @@ class PythonEditorCtrl(StyledTextCtrl):
         if True:
             checkat = self.GetLineEndPosition(linenumber) - 1
             if self.GetCharAt(checkat) == ord(':'):
-                numtabs = numtabs + 1
+                numtabs += 1
             else:
                 lastline = self.GetLine(linenumber)
                 #Remove Comment:
@@ -494,7 +494,7 @@ class PythonEditorCtrl(StyledTextCtrl):
                     lastline = lastline[:comment]
                 if self.reslash.search(lastline.rstrip()) is None:
                     if self.rekeyword.search(lastline) is not None:
-                        numtabs = numtabs - 1
+                        numtabs -= 1
         #Go to current line to add tabs
 
         self.SetTargetStart(pos+1)
@@ -503,12 +503,12 @@ class PythonEditorCtrl(StyledTextCtrl):
 
         self.ReplaceTarget(self.GetTextRange(pos+1, end).lstrip())
 
-        pos = pos + 1
+        pos += 1
         self.GotoPos(pos)
         x = 0
         while (x < numtabs):
             self.AddText('    ')
-            x = x + 1
+            x += 1
         #/Auto Indent Code
 
         #Ensure proper keyboard navigation:
