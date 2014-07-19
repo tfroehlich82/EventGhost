@@ -16,7 +16,6 @@
 
 import eg
 import wx
-from threading import currentThread
 from xml.sax.saxutils import quoteattr, escape
 from cStringIO import StringIO
 import xml.etree.cElementTree as ElementTree

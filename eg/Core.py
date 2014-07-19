@@ -117,7 +117,7 @@ if eg.startupArguments.configDir is None:
     eg.configDir = join(eg.folderPath.RoamingAppData, eg.APP_NAME)
 else:
     eg.configDir = eg.startupArguments.configDir
-eg.localPluginDir = join(eg.folderPath.ProgramData, eg.APP_NAME, "plugins")
+eg.localPluginDir = join(eg.folderPath.PublicAppData, eg.APP_NAME, "plugins")
 eg.corePluginDir = join(eg.mainDir, "plugins")
 eg.pluginDirs = [eg.corePluginDir, eg.localPluginDir]
 if eg.startupArguments.pluginDir is not None:

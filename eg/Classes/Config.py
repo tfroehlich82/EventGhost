@@ -17,7 +17,6 @@
 import eg
 import wx
 import os
-import sys
 from os.path import exists
 from types import ClassType, InstanceType
 

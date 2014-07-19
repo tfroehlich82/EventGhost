@@ -15,7 +15,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import eg
-import wx
 import keyword
 import re
 from wx.stc import * #pylint: disable-msg=W0614,W0401
@@ -438,10 +437,10 @@ class PythonEditorCtrl(StyledTextCtrl):
             if level & STC_FOLDLEVELHEADERFLAG:
                 if force:
                     self.SetFoldExpanded(line, visLevels > 1)
-                    line = self.Expand(line, doExpand, force, visLevels-1)
+                    line = self.Expand(line, doExpand, True, visLevels-1)
                 else:
                     flag = doExpand and self.GetFoldExpanded(line)
-                    line = self.Expand(line, flag, force, visLevels-1)
+                    line = self.Expand(line, flag, False, visLevels-1)
             else:
                 line += 1
 

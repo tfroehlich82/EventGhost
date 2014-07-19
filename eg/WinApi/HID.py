@@ -1,8 +1,5 @@
-import time
-import binascii
 import ctypes
 import _winreg
-import sys
 import threading
 import win32con
 import win32event
@@ -13,6 +10,7 @@ import re
 from ctypes import Structure, Union, c_byte, c_char, c_int, c_long, c_ulong, c_ushort, c_wchar
 from ctypes import pointer, byref, sizeof, POINTER
 from ctypes.wintypes import ULONG, BOOLEAN
+import eg
 
 DeviceRegEx = re.compile(r"\\\\\?\\(\w+)#VID_([0-9a-fA-F]+)\&PID_([0-9a-fA-F]+)#", re.IGNORECASE)
 
@@ -197,7 +195,7 @@ class HIDThread(threading.Thread):
         win32event.SetEvent(self._overlappedRead.hEvent)
 
     def SetRawCallback(self, callback):
-        self.RawCallback = callback;
+        self.RawCallback = callback
         
     def SetButtonCallback(self, callback):
         self.ButtonCallback = callback
@@ -255,7 +253,6 @@ class HIDThread(threading.Thread):
                 self.lockObject.release()
         else:
             raise Exception("invalid handle")
-            return
 
     def run(self):
         #open file/device
@@ -357,7 +354,7 @@ class HIDThread(threading.Thread):
         
         #initializing finished
         try:
-            self.handle = handle;
+            self.handle = handle
             self.initialized = True
             rc, newBuf = win32file.ReadFile(handle, n, self._overlappedRead)
             if eg.debugLevel:
@@ -573,15 +570,14 @@ def GetDeviceDescriptions():
             hiddAttributes.ProductID,
             productString,
             hiddAttributes.VersionNumber)
-        vendorString
-            
+
         #add device to internal list
         deviceList.append(device)
 
     #end loop
     #destroy deviceinfolist
     setupapiDLL.SetupDiDestroyDeviceInfoList(hinfo)
-    return deviceList;
+    return deviceList
 
 
 def IsDeviceName(deviceNameList, vid, pid):
@@ -625,7 +621,7 @@ def GetDevicePath(
             #find the right device by vendor and product ids
             validVendorId = item.vendorId == vendorId
             validProductId = item.productId == productId
-            if versionNumber == None:
+            if versionNumber is None:
                 validVersionNumber = True
             else:
                 validVersionNumber = item.versionNumber == versionNumber

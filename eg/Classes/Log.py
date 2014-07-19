@@ -220,8 +220,10 @@ class Log(object):
             """Logs a message if eg.debugLevel is set."""
             threadName = str(currentThread().getName())
             taskletName = str(eg.Tasklet.GetCurrentId())
-            strs = [strftime("%H:%M:%S:")]
-            strs.append(taskletName + " " + threadName + ":")
+            strs = [
+                strftime("%H:%M:%S:"),
+                taskletName + " " + threadName + ":",
+            ]
 
             for arg in args:
                 strs.append(str(arg))

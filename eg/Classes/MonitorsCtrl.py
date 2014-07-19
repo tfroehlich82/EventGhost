@@ -16,6 +16,7 @@
 
 import wx
 from win32api import EnumDisplayMonitors as Edm
+import eg
 
 class MonsListCtrl(wx.ListCtrl):
 

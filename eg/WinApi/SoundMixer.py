@@ -49,11 +49,11 @@ class SoundMixerException(Exception):
 
 
 def GetMixerControl(componentType, ctrlType, deviceId=0):
-    '''
+    """
     Obtains an appropriate pointer and info for the volume control
     This function attempts to obtain a mixer control. Raises
     SoundMixerException if not successful.
-    '''
+    """
     deviceId = GetDeviceId(deviceId)
     hmixer = HMIXER()
 
@@ -116,7 +116,7 @@ def GetControlValue(hmixer, mixerControl):
 
 
 def SetControlValue(hmixer, mixerControl, value):
-    '''
+    """
     Sets the volumne from the pointer of the object passed through
 
     ' [Note: original source taken from MSDN
@@ -124,7 +124,7 @@ def SetControlValue(hmixer, mixerControl, value):
 
     This function sets the value for a volume control. Returns True if
     successful
-    '''
+    """
 
     valueDetails = MIXERCONTROLDETAILS_UNSIGNED()
     valueDetails.dwValue = value
@@ -237,9 +237,8 @@ def ChangeMasterVolumeBy(value, deviceId=0):
 def GetMixerDevices(useList=False):
     """ Returns a list of all mixer device names available on the system."""
     mixcaps = MIXERCAPS()
-    result = []
+    result = ["Primary Sound Driver"]
     # get the number of Mixer devices in this computer
-    result.append("Primary Sound Driver")
     for i in range(mixerGetNumDevs()):
         # get info about the device
         if mixerGetDevCaps(i, byref(mixcaps), sizeof(MIXERCAPS)):
@@ -255,7 +254,7 @@ def GetDeviceId(deviceId, strVal=False):
     if isinstance(deviceId, int):
         if strVal:
             devices = GetMixerDevices()
-            if deviceId < len(devices) and deviceId > -1:
+            if len(devices) > deviceId > -1:
                 return devices[deviceId]
             else:
                 return devices[0]

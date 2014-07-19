@@ -17,7 +17,6 @@
 import wx
 from wx.lib.filebrowsebutton import FileBrowseButton as _FileBrowseButton
 import types
-import eg
 from eg.Icons import GetInternalBitmap
 
 

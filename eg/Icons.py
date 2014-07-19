@@ -21,7 +21,7 @@
 """
 
 import wx
-from os.path import abspath, dirname, join
+from os.path import abspath, join
 from base64 import b64decode
 from cStringIO import StringIO
 import Image

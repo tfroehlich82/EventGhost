@@ -17,7 +17,6 @@
 import eg
 from eg.Utils import SetDefault
 import os
-import sys
 
 
 class Default:

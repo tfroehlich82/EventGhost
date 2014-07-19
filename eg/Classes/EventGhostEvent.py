@@ -123,7 +123,7 @@ class EventGhostEvent(object):
         eventString = self.string
         if eventString in eg.notificationHandlers:
             for listener in eg.notificationHandlers[eventString].listeners:
-                if listener(self) == True:
+                if listener(self):
                     return
 
         eg.event = self

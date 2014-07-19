@@ -25,8 +25,8 @@ import wx.lib.masked
 
 class TimeCtrl(wx.lib.masked.TimeCtrl):
 
-    '''Work-around of wx.lib.masked.TimeCtrl bug.
-       See http://trac.wxwidgets.org/ticket/11171'''
+    """Work-around of wx.lib.masked.TimeCtrl bug.
+       See http://trac.wxwidgets.org/ticket/11171"""
 
     def _TimeCtrl__validateValue(self, value):
         if not value:
