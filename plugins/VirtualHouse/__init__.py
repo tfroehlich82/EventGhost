@@ -32,7 +32,7 @@ version="0.0.1"
 
 import eg
 import wx
-import wx.lib.agw.fourwaysplitter as FWS
+#import wx.lib.agw.fourwaysplitter as FWS
 from win32gui import SendMessage, GetWindowPlacement
 from eg.WinApi.Dynamic import ShowWindow
 from os.path import join

@@ -32,7 +32,7 @@ def GetWinSysColour(nIndex):
     return val & 0xFF, (val >> 8) & 0xFF, (val >> 16) & 0xFF
 
 
-class Colour:
+class Colour(object):
     """
     Holds all colours needed by the program.
 

@@ -18,7 +18,7 @@ import eg
 import wx
 
 
-class ControlProviderMixin:
+class ControlProviderMixin(object):
 
     def StaticText(self, label, *args, **kwargs):
         """ Returns a wx.StaticText control. """

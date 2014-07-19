@@ -43,7 +43,7 @@ class ProgramError(eg.Exception):
 
 
 
-class Exceptions:
+class Exceptions(object):
 
     class DriverNotFound(ProgramError):
         text = Text.DriverNotFound

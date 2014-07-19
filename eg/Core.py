@@ -265,7 +265,7 @@ class StopException(Exception):
 
 
 
-class HiddenAction:
+class HiddenAction(object):
     pass
 
 
