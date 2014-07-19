@@ -167,7 +167,6 @@ def AssertInActionThread(func):
                 (func.__name__, func.__module__)
             )
         return func(*args, **kwargs)
-        return func(*args, **kwargs)
     return update_wrapper(AssertWrapper, func)
 
 

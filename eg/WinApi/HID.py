@@ -24,7 +24,6 @@ class Text:
     errorInvalidDataIndex = "Found data index not defined as button or control value."
     errorReportLength = "Report length must not be zero for device."
     errorRetrieval = "Error getting HID device info."
-    errorReportLength = "Report length must not be zero for device "
     errorMultipleDevices = "Multiple devices found. Don't know which to use."
     vendorID = "Vendor ID "
     
