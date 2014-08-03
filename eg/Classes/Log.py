@@ -54,7 +54,7 @@ class Log(object):
         self.ctrl = DummyLogCtrl()
         log = self
         if eg.debugLevel:
-            class StdOut:
+            class StdOut(object):
                 def write(self, data):
                     log.Write(data, INFO_ICON)
                     try:
@@ -62,16 +62,16 @@ class Log(object):
                     except:
                         oldStdOut.write(data.decode('mbcs'))
 
-            class StdErr:
+            class StdErr(object):
                 def write(self, data):
                     oldStdErr.write(data.decode("mbcs"))
                     #self.Write(data, ERROR_ICON)
         else:
-            class StdOut:
+            class StdOut(object):
                 def write(self, data):
                     log.Write(data, INFO_ICON)
 
-            class StdErr:
+            class StdErr(object):
                 def write(self, data):
                     log.Write(data, ERROR_ICON)
 
@@ -220,8 +220,10 @@ class Log(object):
             """Logs a message if eg.debugLevel is set."""
             threadName = str(currentThread().getName())
             taskletName = str(eg.Tasklet.GetCurrentId())
-            strs = [strftime("%H:%M:%S:")]
-            strs.append(taskletName + " " + threadName + ":")
+            strs = [
+                strftime("%H:%M:%S:"),
+                taskletName + " " + threadName + ":",
+            ]
 
             for arg in args:
                 strs.append(str(arg))

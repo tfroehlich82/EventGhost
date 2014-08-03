@@ -22,11 +22,12 @@ from eg.Utils import SplitFirstParagraph
 class ConfigDialog(eg.TaskletDialog):
     panel = None
     currentDialog = None
-    
+
     def __init__(self, resizable=True, showLine=True):
         self.result = None
         self.showLine = showLine
         self.resizable = resizable
+
         addTestButton = False
         treeItem = self.treeItem
         name = treeItem.GetTypeName()
@@ -74,8 +75,7 @@ class ConfigDialog(eg.TaskletDialog):
             self,
             name,
             firstParagraph,
-            treeItem.icon,
-            treeItem.url if hasattr(treeItem, "url") else None
+            treeItem.icon
         )
         mainSizer.SetMinSize(size)
         mainSizer.AddMany(

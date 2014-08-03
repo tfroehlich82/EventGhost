@@ -5,7 +5,6 @@
 # (C)2001-2002 Chris Liechti <cliechti@gmx.net>
 # this is distributed under a free software license, see license.txt
 
-import sys, os, string
 VERSION = "947"
 
 from serialwin32 import *

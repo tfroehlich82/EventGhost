@@ -17,7 +17,6 @@
 import eg
 import wx
 import os
-import sys
 from os.path import exists
 from types import ClassType, InstanceType
 
@@ -102,7 +101,7 @@ class Config(Section):
     defaultThreadStartTimeout = 5.00
     colourPickerCustomColours = [(-1, -1, -1, 255) for n in range(16)]
 
-    class plugins: #pylint: disable-msg=C0103
+    class plugins(object): #pylint: disable-msg=C0103
         pass
 
 

@@ -34,7 +34,7 @@ class TreeStateData(eg.PersistentData):
 class Document(object):
 
     def __init__(self):
-        class ItemMixin:
+        class ItemMixin(object):
             document = self
             root = None
         self.ItemMixin = ItemMixin

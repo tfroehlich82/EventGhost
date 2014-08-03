@@ -16,7 +16,6 @@
 
 import eg
 import os
-import sys
 from glob import glob
 from collections import deque
 

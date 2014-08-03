@@ -16,7 +16,6 @@
 
 import eg
 import traceback
-from functools import partial
 from threading import Event
 from eg.WinApi.Dynamic import (
     OpenProcess,
@@ -74,11 +73,11 @@ class EventThread(ThreadWorker):
 
 
     def TriggerEvent(self, suffix, payload=None, prefix="Main", source=eg):
-        '''Trigger an event'''
+        """Trigger an event"""
         event = EventGhostEvent(suffix, payload, prefix, source)
         if event.source in self.filters:
             for filterFunc in self.filters[event.source]:
-                if filterFunc(event) == True:
+                if filterFunc(event):
                     return event
         def Transfer():
             ActionThreadCall(event.Execute)
@@ -97,7 +96,7 @@ class EventThread(ThreadWorker):
         event = EventGhostEvent(suffix, payload, prefix, source)
         if event.source in self.filters:
             for filterFunc in self.filters[event.source]:
-                if filterFunc(event) == True:
+                if filterFunc(event):
                     return event
         def Transfer():
             ActionThreadCall(event.Execute)
@@ -115,7 +114,7 @@ class EventThread(ThreadWorker):
         event = EventGhostEvent(suffix, payload, prefix, source)
         if event.source in self.filters:
             for filterFunc in self.filters[event.source]:
-                if filterFunc(event) == True:
+                if filterFunc(event):
                     return event
         executed = Event()
         def Execute():

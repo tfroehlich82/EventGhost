@@ -34,7 +34,7 @@ mainDir = abspath(join(dirname(__file__.decode('mbcs')), ".."))
 
 # determine the commandline parameters
 import __main__
-class args:
+class args(object):
     hideOnStartup = False
     startupEvent = None
     startupFile = None

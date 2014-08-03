@@ -13,11 +13,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+import inspect
+import types
+from wx.py.filling import SIMPLETYPES
 
 import eg
 import wx
 import wx.aui
-import os
 import re
 from os.path import join
 from collections import defaultdict

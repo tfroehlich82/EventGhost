@@ -18,7 +18,6 @@ import eg
 import wx
 import collections
 from time import strftime, localtime
-import wx.lib.mixins.listctrl as listmix
 
 
 EVENT_ICON = eg.EventItem.icon

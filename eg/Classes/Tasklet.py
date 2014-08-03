@@ -26,7 +26,6 @@
 
 import stackless
 
-
 class Tasklet(stackless.tasklet):
     countTasklets = 0
 
@@ -44,3 +43,8 @@ class Tasklet(stackless.tasklet):
         except AttributeError:
             return 0
 
+    def __call__(self, *args):
+        """
+        Just passes call to parent, but fixes non-callable IDE inspection
+        """
+        return super(Tasklet, self).__call__(*args)

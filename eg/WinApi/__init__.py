@@ -21,6 +21,7 @@ from Utils import PySendMessageTimeout as SendMessageTimeout
 from Utils import PyFindWindow as FindWindow
 from Utils import HighlightWindow, BestWindowFromPoint, IsWin64
 
+# noinspection PyUnresolvedReferences
 from cFunctions import (
     GetWindowText,
     GetClassName,
