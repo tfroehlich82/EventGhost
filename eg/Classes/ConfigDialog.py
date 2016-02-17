@@ -27,7 +27,6 @@ class ConfigDialog(eg.TaskletDialog):
         self.result = None
         self.showLine = showLine
         self.resizable = resizable
-
         addTestButton = False
         treeItem = self.treeItem
         name = treeItem.GetTypeName()
@@ -75,7 +74,8 @@ class ConfigDialog(eg.TaskletDialog):
             self,
             name,
             firstParagraph,
-            treeItem.icon
+            treeItem.icon,
+            treeItem.url if hasattr(treeItem, "url") else None
         )
         mainSizer.SetMinSize(size)
         mainSizer.AddMany(

@@ -1,19 +1,20 @@
-# This file is part of EventGhost.
+# -*- coding: utf-8 -*-
+#
 # plugins/SamsungTV/__init__.py
 # 
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-# 
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+#
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
+#
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Samsung Serial
 # ================
@@ -31,7 +32,7 @@ Plugin to control Samsung TV RS-232."""
 eg.RegisterPlugin(
     name = "Samsung TV",
     author = "prostetnic, Bartman and Fiasco",
-    version = "0.2.1181",
+    version = "0.2." + "$LastChangedRevision: 1181 $".split()[1],
     kind = "external",
     guid = "{ADA3F327-DA18-44E0-A712-8C1C90B52DEC}",
     description = "Control Samsung TV via RS232",

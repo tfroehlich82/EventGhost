@@ -97,8 +97,6 @@ def TestImport(moduleName, includeDeprecated=False):
         return False, "SyntaxError", str(exc)
     except Exception, exc:
         return False, "Exception", str(exc)
-    except:
-        return False, "Exception", "unknown"
     finally:
         sys.stdout = oldStdOut
         sys.stderr = oldStdErr

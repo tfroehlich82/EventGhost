@@ -132,7 +132,7 @@ class Password(object):
         text = pickle.dumps(newDatabase)
         key = cls.masterkey
         # The length of the key must be a multiple of 16
-        key += "X" * (16 - len(key) % 16)
+        key = key + "X" * (16 - len(key) % 16)
         hashObj = hashlib.md5()
         hashObj.update(text)
         textHash = hashObj.digest()
@@ -149,7 +149,7 @@ class Password(object):
             return
         key = cls.masterkey
         # The length of the key must be a multiple of 16
-        key += "X" * (16 - (len(key) % 16))
+        key = key + "X" * (16 - (len(key) % 16))
         paddedString = AES.new(key, AES.MODE_ECB).decrypt(data)
         textHash = paddedString[:16]
         length = struct.unpack("L", paddedString[16:20])[0]

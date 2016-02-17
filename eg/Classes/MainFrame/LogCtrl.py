@@ -18,6 +18,7 @@ import eg
 import wx
 import collections
 from time import strftime, localtime
+import wx.lib.mixins.listctrl as listmix
 
 
 EVENT_ICON = eg.EventItem.icon
@@ -48,6 +49,7 @@ class LogCtrl(wx.ListCtrl):
             df = self.GetFont()
             font = wx.Font(df.GetPointSize(), wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, "Courier New")
             self.SetFont(font)
+
         self.SetImageList(eg.Icons.gImageList, wx.IMAGE_LIST_SMALL)
 
         sysColour = eg.colour.windowBackground

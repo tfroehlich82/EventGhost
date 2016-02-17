@@ -13,6 +13,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+#
 
 import wx
 from eg.Utils import DecodeReST
@@ -43,11 +45,11 @@ class HtmlWindow(wxHtmlWindow):
         self.SetForegroundColour(parent.GetForegroundColour())
         self.SetBackgroundColour(parent.GetBackgroundColour())
 
-        if wx.html.HW_NO_SELECTION & style:
-            self.Bind(wx.EVT_MOTION, self.OnIdle)
-            self.handCursor = wx.StockCursor(wx.CURSOR_HAND)
-            self.x1, self.y1 = self.GetScrollPixelsPerUnit()
-            self.isSet = False
+        #if wx.html.HW_NO_SELECTION & style:
+        #    self.Bind(wx.EVT_MOTION, self.OnIdle)
+        #    self.handCursor = wx.StockCursor(wx.CURSOR_HAND)
+        #    self.x1, self.y1 = self.GetScrollPixelsPerUnit()
+        #    self.isSet = False
         self.Bind(EVT_HTML_LINK_CLICKED, self.OnHtmlLinkClicked)
 
 
@@ -86,22 +88,22 @@ class HtmlWindow(wxHtmlWindow):
         else:
             return HTML_OPEN
 
-
-    def OnIdle(self, event):
-        x2, y2 = self.GetViewStart()
-        x3, y3 = event.GetPosition()
-        x = self.x1 * x2 + x3
-        y = self.y1 * y2 + y3
-        cell = self.GetInternalRepresentation().FindCellByPos(x, y)
-        if cell:
-            if cell.GetLink(x, y):
-                if not self.isSet:
-                    self.SetCursor(self.handCursor)
-                    self.isSet = True
-            elif self.isSet:
-                self.SetCursor(wx.STANDARD_CURSOR)
-                self.isSet = False
-        elif self.isSet:
-            self.SetCursor(wx.STANDARD_CURSOR)
-            self.isSet = False
+#
+#    def OnIdle(self, event):
+#        x2, y2 = self.GetViewStart()
+#        x3, y3 = event.GetPosition()
+#        x = self.x1 * x2 + x3
+#        y = self.y1 * y2 + y3
+#        cell = self.GetInternalRepresentation().FindCellByPos(x, y)
+#        if cell:
+#            if cell.GetLink(x, y):
+#                if not self.isSet:
+#                    self.SetCursor(self.handCursor)
+#                    self.isSet = True
+#            elif self.isSet:
+#                self.SetCursor(wx.STANDARD_CURSOR)
+#                self.isSet = False
+#        elif self.isSet:
+#            self.SetCursor(wx.STANDARD_CURSOR)
+#            self.isSet = False
 

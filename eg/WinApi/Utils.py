@@ -29,7 +29,7 @@ from Dynamic import (
     EnumDisplayMonitors, FindWindow, GetWindowLong,
     IsWindowVisible, GetParent, GetWindowDC, GetClassLong, EnumChildWindows,
     ReleaseDC, GetDC, DeleteObject, CreatePen, GetSystemMetrics,
-    ScreenToClient, WindowFromPoint, SendMessageTimeout,
+    SendMessageTimeout, ScreenToClient, WindowFromPoint, SendMessageTimeout,
     # types
     DWORD, RECT, POINT, MONITORENUMPROC, RGB, WINFUNCTYPE,
     BOOL, HWND, LPARAM,
@@ -45,7 +45,6 @@ from Dynamic.PsApi import (
 
 from win32api import OpenProcess, TerminateProcess
 from win32com.client import GetObject
-import eg
 
 ENUM_CHILD_PROC = WINFUNCTYPE(BOOL, HWND, LPARAM)
 EnumChildWindows.argtypes = [HWND, ENUM_CHILD_PROC, LPARAM]
@@ -165,8 +164,10 @@ def BestWindowFromPoint(point):
     for hWnd in hWnds:
         GetWindowRect(hWnd, byref(rect))
         if (
-            rect.left <= x <= rect.right
-            and rect.top <= y <= rect.bottom
+            x >= rect.left
+            and x <= rect.right
+            and y >= rect.top
+            and y <= rect.bottom
         ):
             hdc = GetDC(hWnd)
             clientPoint.x, clientPoint.y = x, y

@@ -35,6 +35,6 @@ class TranslatableStringsMeta(type):
 
 
 
-class TranslatableStrings(object):
+class TranslatableStrings:
     __metaclass__ = TranslatableStringsMeta
 

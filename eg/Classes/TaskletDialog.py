@@ -28,7 +28,6 @@ class TaskletDialog(wx.Dialog, eg.ControlProviderMixin):
     @eg.LogItWithReturn
     def __init__(self, *args, **kwargs):
         self.__lastEventId = None
-        self.result = None
         self.__done = False
         self.setupFinished = False
         wx.Dialog.__init__(self, *args, **kwargs)
@@ -50,7 +49,7 @@ class TaskletDialog(wx.Dialog, eg.ControlProviderMixin):
         self.Show()
 
 
-    def Configure(self, *args, **kwargs):
+    def Configure(self, *args):
         raise NotImplementedError
 
 

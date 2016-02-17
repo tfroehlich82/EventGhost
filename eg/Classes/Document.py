@@ -34,7 +34,7 @@ class TreeStateData(eg.PersistentData):
 class Document(object):
 
     def __init__(self):
-        class ItemMixin(object):
+        class ItemMixin:
             document = self
             root = None
         self.ItemMixin = ItemMixin
@@ -81,13 +81,13 @@ class Document(object):
     def SetIsDirty(self, flag=True):
         self.isDirty = flag
         eg.Notify("DocumentChange", flag)
-        
-    
+
+
     def SetUndoState(self, undoState):
         self.undoState = undoState
         eg.Notify("UndoChange", undoState)
-        
-    
+
+
     def GetTitle(self):
         if self.filePath is None:
             filename = eg.text.General.unnamedFile

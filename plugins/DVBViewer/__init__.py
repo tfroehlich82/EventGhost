@@ -5,22 +5,19 @@ PLUGIN_VERSION                       = "3.0.1"
 SUPPORTED_DVBVIEWER_VERSIONS         = '4.9.x (older versions might work but are untested)'
 SUPPORTED_RECORDING_SERVICE_VERSIONS = '1.10.x (older versions might work but are untested)'
 
-# This file is part of EventGhost.
-# Copyright (C) 2005 Lars-Peter Voss <bitmonster@eventghost.org>
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
 #
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
 #
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Version history (newest on top):
 # 3.0.1: Debug log output reduced
@@ -3231,7 +3228,7 @@ class GetRecordingsIDs( eg.ActionClass ) :
         getFlags = plugin.ServiceConfigure(  enableDVBViewer, enableDVBService, updateDVBService, affirmed = False, panel = panel )
 
         while panel.Affirmed():
-            active = checkBox.GetValue()
+            active      = checkBox.GetValue()
             enableDVBViewer, enableDVBService, updateDVBService = getFlags()
             panel.SetResult( active, enableDVBViewer, enableDVBService, updateDVBService )
         return True

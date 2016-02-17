@@ -1,26 +1,30 @@
+# -*- coding: utf-8 -*-
+#
 # plugins/MediaPlayerClassic/__init__.py
 #
 # Copyright (C) 2006 MonsterMagnet
 #
 # This file is a plugin for EventGhost.
+# Copyright (C) 2005-2012 Lars-Peter Voss <bitmonster@eventghost.org>
 #
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
 #
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+    
 # Changelog (in reverse chronological order):
 # -------------------------------------------
-# 2.7 by Pako 2013-09-02 10:14 UTC+1
+# 2.9 by Pako 2015-01-12 19:23 UTC+1
+#     - bugfix - Find_MPC() function now works also in 64-bit system
+# 2.8 by Pako 2014-12-26 10:38 UTC+1
+#     - bugfix - the function GetMpcHcPath() improved
+# 2.7 by Pako 2014-12-18 08:09 UTC+1
 #     - bugfix (Show menu - Test button)
 # 2.6 by Pako 2013-02-10 10:56 UTC+1
 #     - the function GetMpcHcPath() improved - now works also in x64 environment
@@ -68,7 +72,7 @@
 eg.RegisterPlugin(
     name = "Media Player Classic",
     author = "MonsterMagnet",
-    version = "2.7",
+    version = "2.9",
     kind = "program",
     guid = "{DD75104D-D586-438A-B63D-3AD01A4D4BD3}",
     createMacrosOnAdd = True,
@@ -138,7 +142,7 @@ WM_CLOSE         = 16
 
 def Find_MPC():
     mpchc = eg.WindowMatcher(
-        u'mpc-hc.exe',
+        u'mpc-hc{*}.exe',
         None,
         u'MediaPlayerClassicW',
         None,
@@ -2265,7 +2269,7 @@ class MediaPlayerClassic(eg.PluginBase):
         opened = "Opened"
         closed = "Closed"
         label = "Path to MPC-HC executable:"
-        fileMask = "MPC-HC executable|mpc-hc.exe|All-Files (*.*)|*.*"
+        fileMask = "MPC-HC executable|mpc-hc*.exe|All EXE files (*.exe)|*.exe"
         gotoLabel = "Go To..."
 
 
@@ -2463,10 +2467,13 @@ class MediaPlayerClassic(eg.PluginBase):
         the Windows registry.
         """
         try:
-            args = [_winreg.HKEY_CURRENT_USER,            
-                "Software\Gabest\Media Player Classic"]
             if "PROCESSOR_ARCHITEW6432" in environ:
+                args = [_winreg.HKEY_CURRENT_USER,            
+                    "Software\MPC-HC\MPC-HC"]
                 args.extend((0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY))
+            else:
+                args = [_winreg.HKEY_CURRENT_USER,            
+                    "Software\Gabest\Media Player Classic"]
             mpc = _winreg.OpenKey(*args)
             mpcPath =_winreg.QueryValueEx(mpc, "ExePath")[0]
             _winreg.CloseKey(mpc)

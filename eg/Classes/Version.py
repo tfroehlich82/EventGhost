@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-class Version(object):
+class Version:
     base = "0.4.1"
     try:
         from VersionRevision import revision, buildTime

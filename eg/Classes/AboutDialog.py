@@ -25,24 +25,11 @@ from StringIO import StringIO
 from eg.WinApi.Dynamic import (
     MEMORYSTATUSEX, GlobalMemoryStatusEx, byref, sizeof
 )
-from htmlentitydefs import codepoint2name
 try:
     import stackless
     is_stackless = True
 except ImportError:
     is_stackless = False
-
-
-
-def unicode2htmlentities(unicodeString):
-
-   htmlString = []
-   for char in unicodeString:
-      if ord(char) < 128:
-         htmlString.append(char)
-      else:
-         htmlString.append('&%s;' % codepoint2name[ord(char)])
-   return ''.join(htmlString) 
 
 
 def GetPluginAuthors():
@@ -86,7 +73,8 @@ SPECIAL_THANKS_DATA = (
             ("peter", "Dutch"),
             ("noc123", "Polish"),
             ("somainit", "Japanese"),
-            (" PedroV9", "Portuguese (Brazilian)"),
+            ("PedroV9", "Portuguese (Brazilian)"),
+            ("batto", "Vietnamese"),
         ),
     ),
     (
@@ -161,7 +149,7 @@ SPECIAL_THANKS_DATA = (
             (
                 'Benjamin Webb',
                 (
-                    'for the nice <a href="http://www.eventghost.net/wiki/'
+                    'for the nice <a href="http://www.eventghost.net/mediawiki/'
                     'Controlling%20your%20living%20room%20with%20EventGhost">'
                     'wiki article</a>'
                 )
@@ -258,7 +246,7 @@ class AboutPanel(wx.Panel):
             self,
             wx.ID_ANY,
             eg.text.MainFrame.Menu.WebWiki.replace("&", ""),
-            URL="http://www.eventghost.net/wiki/"
+            URL="http://www.eventghost.net/mediawiki/"
         )
         hypelink3.SetFont(font)
 
@@ -333,12 +321,12 @@ class SpecialThanksPanel(HtmlPanel):
             elif cols == 1:
                 for name, descr in persons:
                     write('<TR><TD ALIGN=CENTER WIDTH="50%" COLSPAN="2"><B>')
-                    write(unicode2htmlentities(name))
+                    write(name)
                     write('</B></RIGHT></TD></TR>')
             else:
                 for name, descr in persons:
                     write('<TR><TD ALIGN=RIGHT VALIGN=TOP WIDTH="50%"><B>')
-                    write(unicode2htmlentities(name))                        
+                    write(name)
                     write('</B></RIGHT></TD><TD WIDTH="50%"><I>')
                     write(descr)
                     write('</I></RIGHT></TD></TR>')

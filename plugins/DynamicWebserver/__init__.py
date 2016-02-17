@@ -1,27 +1,25 @@
-# This file is part of EventGhost.
+# -*- coding: utf-8 -*-
 # plugins/DynamicWebserver/__init__.py
 #
-# Copyright (C) 2005 Lars-Peter Voss <bitmonster@eventghost.org>
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
 #
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
 #
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
 eg.RegisterPlugin(
     name = "Dynamic Webserver",
     author = "Bitmonster/Kingtd",
-    version = "1.0.503",
+    version = "1.0." + "$LastChangedRevision: 503 $".split()[1],
     guid = "{2FC713FF-0093-4271-A520-F0F6BB05A0E8}",
     description = u'''<rst>Implements a small webserver, 
 that you can use to generate events through HTML-pages.

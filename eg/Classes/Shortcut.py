@@ -18,7 +18,7 @@ import pythoncom
 from win32com.shell import shell
 
 
-class Shortcut(object):
+class Shortcut:
 
     @classmethod
     def Create(

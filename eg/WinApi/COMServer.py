@@ -21,7 +21,7 @@ import atexit
 import pythoncom
 
 
-class EventGhostCom(object):
+class EventGhostCom:
     _public_methods_ = [
         'TriggerEvent',
         'BringToFront',

@@ -50,6 +50,7 @@ class Rcmm(IrProtocolBase):
 
 
     def Decode(self, data):
+        raise DecodeError("not implemented")
         if not (200 < data[0] < 600):
             DecodeError("wrong header pulse")
         if not (100 < data[1] < 500):

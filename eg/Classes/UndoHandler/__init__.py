@@ -16,7 +16,7 @@
 
 MODULE_GLOBALS = globals()
 
-class UndoHandler(object):
+class UndoHandler:
 
     def __getattr__(self, name):
         mod = __import__(name, MODULE_GLOBALS)

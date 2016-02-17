@@ -29,7 +29,7 @@ class Config(eg.PersistentData):
     language = None
 
 
-class UnassignedValue(object):
+class UnassignedValue:
     pass
 
 

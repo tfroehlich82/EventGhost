@@ -120,7 +120,7 @@ class PluginModuleInfo(object):
         self.version = unicode(version)
         self.canMultiLoad = canMultiLoad
         self.createMacrosOnAdd = createMacrosOnAdd
-        self.url = unicode(url)
+        self.url = unicode(url) if url else url # Added by Pako
         self.guid = guid.upper()
         if not guid:
             eg.PrintDebugNotice("missing guid in plugin: %s" % self.path)

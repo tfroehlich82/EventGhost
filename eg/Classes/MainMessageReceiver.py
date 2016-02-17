@@ -23,12 +23,12 @@ from eg.WinApi.Dynamic import (
 
 
 class MainMessageReceiver(eg.MessageReceiver):
-    
+
     def __init__(self):
         self.hwndNextViewer = None
         eg.MessageReceiver.__init__(self, "EventGhost Message Receiver")
-        
-    
+
+
     def Setup(self):
         eg.MessageReceiver.Setup(self)
         self.AddHandler(WM_CHANGECBCHAIN, self.OnChangeClipboardChain)
@@ -58,3 +58,4 @@ class MainMessageReceiver(eg.MessageReceiver):
     def Stop(self):
         ChangeClipboardChain(self.hwnd, self.hwndNextViewer)
         eg.MessageReceiver.Stop(self)
+

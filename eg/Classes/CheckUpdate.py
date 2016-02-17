@@ -168,7 +168,7 @@ def _checkUpdate(manually=False):
 
 
 
-class CheckUpdate(object):
+class CheckUpdate:
     @classmethod
     @eg.LogIt
     def Start(cls):

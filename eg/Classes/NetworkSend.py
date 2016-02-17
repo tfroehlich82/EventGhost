@@ -65,7 +65,7 @@ def NetworkSend(host, port, password, eventString, payload=None):
         digest = md5(token).hexdigest()
 
         # add the enters
-        digest += "\n"
+        digest = digest + "\n"
 
         # Send it to the server
         sock.sendall(digest)

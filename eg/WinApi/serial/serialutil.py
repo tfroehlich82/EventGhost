@@ -335,7 +335,7 @@ class SerialBase(FileLike):
         """Get the current DsrDtr flow control setting."""
         return self._dsrdtr
 
-    dsrdtr = property(getDsrDtr, setDsrDtr, None, "DSR/DTR flow control setting")
+    dsrdtr = property(getDsrDtr, setDsrDtr, "DSR/DTR flow control setting")
 
     #  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 

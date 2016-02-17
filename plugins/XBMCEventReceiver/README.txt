@@ -14,6 +14,10 @@
 #  - Additional parsing of input from XBMC host
 #  
 #  If you have any additional comments or suggestions feel free to contact me at vortexrotor@vortexbb.com
+#
+# $LastChangedDate: 2009-12-23 $
+# $LastChangedRevision: 2.0 $
+# $LastChangedBy: vortexrotor $
 
 
 XBMC Event Receiver Plugin for Eventghost - README

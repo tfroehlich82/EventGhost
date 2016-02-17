@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import eg
 from eg.Utils import SetDefault
 import os
+import sys
 
 
 class Default:
@@ -54,7 +54,9 @@ class Default:
         unnamedMacro = "<unnamed macro>"
         unnamedEvent = "<unnamed event>"
         unnamedFile = "<unnamed file>"
-        moreTag = "more..."
+    #    moreTag = "more..."
+        supportSentence = "Support for this plugin can be found"
+        supportLink = "here"
         settingsPluginCaption = "Plugin Item Settings"
         settingsActionCaption = "Action Item Settings"
         settingsEventCaption = "Event Item Settings"

@@ -123,7 +123,7 @@ class EventGhostEvent(object):
         eventString = self.string
         if eventString in eg.notificationHandlers:
             for listener in eg.notificationHandlers[eventString].listeners:
-                if listener(self):
+                if listener(self) == True:
                     return
 
         eg.event = self
@@ -154,7 +154,10 @@ class EventGhostEvent(object):
                 obj = obj.parent
             else:
                 activeHandlers.add(eventHandler)
-
+        
+        for listener in eg.log.eventListeners:
+            listener.LogEvent(self)
+            
         if config.onlyLogAssigned and len(activeHandlers) == 0:
             self.SetStarted()
             return

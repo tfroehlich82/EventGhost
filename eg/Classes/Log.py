@@ -47,6 +47,7 @@ class Log(object):
 
     def __init__(self):
         self.logListeners = []
+        self.eventListeners = []
         self.NativeLog = True
         self.buffer = ""
         self.data = deque()
@@ -54,7 +55,7 @@ class Log(object):
         self.ctrl = DummyLogCtrl()
         log = self
         if eg.debugLevel:
-            class StdOut(object):
+            class StdOut:
                 def write(self, data):
                     log.Write(data, INFO_ICON)
                     try:
@@ -62,16 +63,16 @@ class Log(object):
                     except:
                         oldStdOut.write(data.decode('mbcs'))
 
-            class StdErr(object):
+            class StdErr:
                 def write(self, data):
                     oldStdErr.write(data.decode("mbcs"))
                     #self.Write(data, ERROR_ICON)
         else:
-            class StdOut(object):
+            class StdOut:
                 def write(self, data):
                     log.Write(data, INFO_ICON)
 
-            class StdErr(object):
+            class StdErr:
                 def write(self, data):
                     log.Write(data, ERROR_ICON)
 
@@ -125,6 +126,16 @@ class Log(object):
     def RemoveLogListener(self, listener):
         if listener in self.logListeners:
             self.logListeners.remove(listener)
+            
+            
+    def AddEventListener(self, listener):
+        if listener not in self.eventListeners:
+            self.eventListeners.append(listener)
+
+
+    def RemoveEventListener(self, listener):
+        if listener in self.eventListeners:
+            self.eventListeners.remove(listener)
    
 
     def _WriteLine(self, line, icon, wRef, when, indent):
@@ -220,10 +231,8 @@ class Log(object):
             """Logs a message if eg.debugLevel is set."""
             threadName = str(currentThread().getName())
             taskletName = str(eg.Tasklet.GetCurrentId())
-            strs = [
-                strftime("%H:%M:%S:"),
-                taskletName + " " + threadName + ":",
-            ]
+            strs = [strftime("%H:%M:%S:")]
+            strs.append(taskletName + " " + threadName + ":")
 
             for arg in args:
                 strs.append(str(arg))

@@ -1,25 +1,27 @@
+# -*- coding: utf-8 -*-
+#
 # plugins/MediaMonkey/__init__.py
 #
 # Copyright (C)  2009-2011 Pako  <lubos.ruckl@quick.cz>
 #
-# This file is part of EventGhost.
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
 #
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
 #
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Changelog (in reverse chronological order):
 # -------------------------------------------
+# 0.3.7 by Pako 2014-06-08 12:06 UTC+1
+#     - - changes caused by a new eg.Scheduler
 # 0.3.6 by Pako 2013-02-13 08:38 UTC+1
 #     - bugfix (typing error)
 # 0.3.5 by Pako 2013-02-11 19:37 UTC+1
@@ -75,7 +77,7 @@ SC_MINIMIZE   = 61472
 eg.RegisterPlugin(
     name = "MediaMonkey",
     author = "Pako",
-    version = "0.3.6",
+    version = "0.3.7",
     kind = "program",
     guid = "{50602341-ABC3-47AD-B859-FCB8C03ED4EF}",
     createMacrosOnAdd = True,
@@ -1189,6 +1191,9 @@ Whereas selecting the "%s" checkbox will cause the player to jump randomly throu
         "Year",
     )
 #====================================================================
+def getHwnd():
+    if eg.document is not None:
+        return eg.document.frame.GetHandle()
 
 class MediaMonkey(eg.PluginBase):
     manFlg = False
@@ -1266,9 +1271,10 @@ class MediaMonkey(eg.PluginBase):
                 if isfile(MMpath+"\\EventGhost.vbs"):
                     mssgs.extend((" ", self.text.vbsFile % MMpath))
                 self.info.Start = self.DummyStart #Start disabling
+                hwnd = getHwnd()
                 wx.CallAfter(
                     MessageBox,
-                    eg.document.frame.GetHandle(),
+                    hwnd,
                     "\n".join(mssgs),
                     "EventGhost - MediaMonkey plugin",
                     48
@@ -1276,9 +1282,10 @@ class MediaMonkey(eg.PluginBase):
                 raise self.Exceptions.InitFailed
             elif isfile(MMpath+"\\EventGhost.vbs"):
                 self.info.Start = self.DummyStart #Start disabling
+                hwnd = getHwnd()
                 wx.CallAfter(
                     MessageBox,
-                    eg.document.frame.GetHandle(),
+                    hwnd,
                     self.text.vbsFile % MMpath,
                     "EventGhost - MediaMonkey plugin",
                     48
@@ -1287,9 +1294,10 @@ class MediaMonkey(eg.PluginBase):
 
         else:
             self.info.Start = self.DummyStart #Start disabling
+            hwnd = getHwnd()
             wx.CallAfter(
                 MessageBox,
-                eg.document.frame.GetHandle(),
+                hwnd,
                 self.text.noMM,
                 "EventGhost - MediaMonkey plugin",
                 48
@@ -1377,7 +1385,7 @@ class MediaMonkey(eg.PluginBase):
         elif not self.autoFlg:
             if not self.manFlg:
                 self.manFlg = True
-                eg.scheduler.AddTask(0.05, self.startWorkerThread)
+                eg.scheduler.AddShortTask(0.05, self.startWorkerThread)
 
 
     def startWorkerThread(self):
@@ -1524,7 +1532,7 @@ class Start(eg.ActionBase):
     def __call__(self, choice=True):
         if not self.plugin.isRunning() and not self.plugin.autoFlg:
             self.plugin.autoFlg = True
-            eg.scheduler.AddTask(0.1, self.plugin.startWorkerThread)
+            eg.scheduler.AddShortTask(0.1, self.plugin.startWorkerThread)
             if choice:
                 self.plugin.checkOpened = eg.scheduler.AddTask(
                     1,

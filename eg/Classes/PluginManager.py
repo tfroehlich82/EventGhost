@@ -30,7 +30,7 @@ class LoadErrorPlugin(eg.PluginBase):
 
 
 class NonexistentPlugin(eg.PluginBase):
-    class Text:
+    class text:
         pass
 
     def __init__(self):

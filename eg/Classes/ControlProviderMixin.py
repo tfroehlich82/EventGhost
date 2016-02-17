@@ -18,7 +18,7 @@ import eg
 import wx
 
 
-class ControlProviderMixin(object):
+class ControlProviderMixin:
 
     def StaticText(self, label, *args, **kwargs):
         """ Returns a wx.StaticText control. """
@@ -80,7 +80,7 @@ class ControlProviderMixin(object):
 
     def RadioBox(self, value, choices, *args, **kwargs):
         kwargs["choices"] = choices
-        radioBox = eg.RadioBox(self, -1, *args, **kwargs)
+        radioBox = eg.RadioBox(self, *args, **kwargs)
         radioBox.SetValue(value)
         return radioBox
 

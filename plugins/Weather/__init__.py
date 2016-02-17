@@ -1,28 +1,28 @@
+# -*- coding: utf-8 -*-
 #
-# This file is a plugin for EventGhost.
 # plugins/Weather/__init__.py
 #
 # Copyright (C) 2009 Peter
 #
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
 #
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
+#
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USAfrom win32com.client import constants
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 eg.RegisterPlugin(
     name = "Weather",
     author = "Peter",
     guid = "{E0ED124C-F85C-497B-8FFF-6A2B745F9076}",
-    version = "1.2.1194",
+    version = "1.2." + "$LastChangedRevision: 1194 $".split()[1],
     kind = "program",
     description = (
         "Uses the Google web service to retrieve current and forecasted weather information." 

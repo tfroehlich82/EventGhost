@@ -1,19 +1,20 @@
-# This file is a plugin for EventGhost.
+# -*- coding: utf-8 -*-
+#
 # plugins/XBMCEventReceiver/__init__.py
 #
-# EventGhost is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
 #
-# EventGhost is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
+#
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 # 
 # This plugin is based on the Broadcaster plugin that was originally provided 
 # by the good work from Kingtd.  I have used it as a basis for true 2-way control 
@@ -41,7 +42,7 @@ import eg
 eg.RegisterPlugin(
     name = "XBMC Event Receiver",
     author = "vortexrotor <vortexrotor@vortexbb.com",
-    version = "2.0.5",
+    version = "2.0." + "$LastChangedRevision: 5 $".split()[1],
     kind = "program",
     guid = "{9872BD49-2022-4F1B-B362-85F1ED203B7E}",
     description = (

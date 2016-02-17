@@ -1,21 +1,22 @@
-# This file is part of EventGhost.
+# -*- coding: utf-8 -*-
+#
 # plugins/CM11A /__init__.py
 #
 # Written by Silviu Marghescu
 #
-# This plug-in is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-# 
-# This plug-in is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
+# This file is a plugin for EventGhost.
+# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+#
+# EventGhost is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation;
+#
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
 # You should have received a copy of the GNU General Public License
-# along with EventGhost; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #
 # Revision history:
@@ -37,7 +38,7 @@ Event generation can be disabled altogether.
 eg.RegisterPlugin(
     name = "CM11A",
     author = "Silviu Marghescu",
-    version = "0.3.2",
+    version = "0.3." + "$LastChangedRevision: 2 $".split()[1],
     kind = "external",
     guid = "{7D5FF697-3094-4209-AEF6-E3DA575FB657}",
     description = "Control a CM11A device via the serial interface",
