@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 __all__ = ["Bunch", "NotificationHandler", "LogIt", "LogItWithReturn",
     "TimeIt", "AssertInMainThread", "AssertInActionThread", "ParseString",
@@ -462,8 +464,8 @@ def ExecFile(filename, globals=None, locals=None):
 
 def GetBootTimestamp(unix_timestamp = True):
     """
-    Returns the time of the last system boot. 
-    If unix_timestamp == True, result is a unix temestamp. 
+    Returns the time of the last system boot.
+    If unix_timestamp == True, result is a unix temestamp.
     Otherwise it is in human readable form.
     """
     now = time.time()
@@ -472,11 +474,11 @@ def GetBootTimestamp(unix_timestamp = True):
     up = GetTickCount64() / 1000.0
     st = str(dt.fromtimestamp(now - up))
     return now-up if unix_timestamp else st[:st.index(".")]
-    
+
 
 def GetUpTime(seconds = True):
     """
-    Returns a runtime of system in seconds. 
+    Returns a runtime of system in seconds.
     If seconds == False, returns the number of days, hours, minutes and seconds.
     """
     GetTickCount64 = windll.kernel32.GetTickCount64
@@ -484,3 +486,4 @@ def GetUpTime(seconds = True):
     ticks = GetTickCount64()/1000.0
     delta = str(td(seconds = ticks))
     return ticks if seconds else delta[:delta.index(".")]
+

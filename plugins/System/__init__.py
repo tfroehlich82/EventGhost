@@ -1,25 +1,30 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import eg
 import traceback
 
 eg.RegisterPlugin(
     name = "System",
-    author = "Bitmonster & blackwind",
+    author = (
+        "Bitmonster",
+        "blackwind",
+    ),
     version = "1.1.10",
     description = (
         "Controls different aspects of your system, like sound card, "
@@ -444,8 +449,8 @@ class GetUpTime(eg.ActionBase):
     class text:
         name = "Get Uptime"
         description  = """
-            Returns a runtime of system in seconds. 
-            If checkbox is not checked, returns the number of days, 
+            Returns a runtime of system in seconds.
+            If checkbox is not checked, returns the number of days,
             hours, minutes and seconds.
         """
         ticks = "Return result as the number of seconds (ticks)"
@@ -468,8 +473,8 @@ class GetBootTimestamp(eg.ActionBase):
     class text:
         name = "Get Boot Timestamp"
         description  = """
-            Returns the time of the last system boot. 
-            If checkbox is checked, result is a unix temestamp. 
+            Returns the time of the last system boot.
+            If checkbox is checked, result is a unix temestamp.
             Otherwise it is in human readable form.
         """
         timestamp = "Result return as an unix timestamp"
@@ -477,7 +482,7 @@ class GetBootTimestamp(eg.ActionBase):
 
     def __call__(self, timestamp = True):
         return eg.Utils.GetBootTimestamp(unix_timestamp = timestamp)
-    
+
 
     def Configure(self, timestamp = True):
         panel = eg.ConfigPanel()
@@ -1260,7 +1265,7 @@ class ShapedFrame(wx.Frame):
                 pil = Image.open(StringIO(b64decode(imageFile)))
             except:
                 eg.PrintError(error % data)
-                return            
+                return
         self.name = name
         self.plugin = plugin
         self.imageFile = imageFile
@@ -1988,7 +1993,7 @@ class ShowQRcode(eg.ActionBase):
         border = "Border width [box]:"
         title = "Name of image:"
         sizeMode = "Fullscreen:"
-        titleTool = """Required only if you want to close the image window 
+        titleTool = """Required only if you want to close the image window
 programmatically\nUse the action: Hide image"""
 
 
@@ -2019,14 +2024,14 @@ programmatically\nUse the action: Hide image"""
         border = parseArgument(border)
         if data:
             qr = QRCode(
-                version = None, 
+                version = None,
                 border = border,
                 error_correction = QRconstants.ERROR_CORRECT_M,
                 box_size = box,
             )
             qr.add_data(data)
             qr.make(fit = True)
-            img = qr.make_image()        
+            img = qr.make_image()
             buff = StringIO()
             img.save(buff)
             b64 = b64encode(buff.getvalue())
@@ -2049,7 +2054,7 @@ programmatically\nUse the action: Hide image"""
                 0,
                 640,
                 360,
-                (0, 0, 0), 
+                (0, 0, 0),
                 True,
                 True,
                 True,

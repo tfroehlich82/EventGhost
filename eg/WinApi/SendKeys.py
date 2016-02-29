@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 VK_CODES = (
     ('AltGr', 10),
@@ -435,7 +437,7 @@ class SendKeysParser:
                     processID
                 )
             #self.WaitForInputProcessed()
-            
+
             oldKeyboardState = PBYTE256()
             GetKeyboardState(byref(oldKeyboardState))
 
@@ -519,7 +521,7 @@ class SendKeysParser:
                     SetKeyboardState(byref(keyboardStateBuffer))
                     PostMessage(hwnd, mesg, keyCode, lparam)
                     self.WaitForInputProcessed()
-                    
+
             if mode==0 or mode==2:
                 for virtualKey in reversed(block):
                     keyCode = virtualKey & 0xFF

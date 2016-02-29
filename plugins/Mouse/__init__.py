@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import eg
 
@@ -34,7 +36,10 @@ Jrhy/+AqGrAMOnH86mAAAAAElFTkSuQmCC"""
 
 eg.RegisterPlugin(
     name = "Mouse",
-    author = "Bitmonster & Sem;colon",
+    author = (
+        "Bitmonster",
+        "Sem;colon",
+    ),
     version = "1.1.1",
     description = (
         "Gives you actions to control the mouse pointer and emulation of "
@@ -105,7 +110,7 @@ class MouseThread(Thread):
                 self.speed = 0
                 stop = False
                 continue
-                
+
             if self.acceleration == 0:
                 sleep(0.05)
                 continue
@@ -233,7 +238,7 @@ class GoDirection(eg.ActionBase):
         direction = float(direction)
         valueCtrl = panel.SpinNumCtrl(float(direction), min=0, max=360)
         panel.AddLine(text.text1, valueCtrl, text.text2)
-        
+
         initSpeedLabel = wx.StaticText(panel, -1, text.text3)
         initSpeedSpin = eg.SpinIntCtrl(panel, -1, initSpeed, 10, 2000)
         maxSpeedLabel = wx.StaticText(panel, -1, text.text4)
@@ -244,10 +249,10 @@ class GoDirection(eg.ActionBase):
         panel.AddLine(initSpeedLabel, initSpeedSpin)
         panel.AddLine(maxSpeedLabel, maxSpeedSpin)
         panel.AddLine(accelerationFactorLabel, accelerationFactorSpin)
-        
+
         uAMCB = panel.CheckBox(useAlternateMethod, text.label_AM)
         panel.AddLine(uAMCB)
-        
+
         while panel.Affirmed():
             panel.SetResult(
                 valueCtrl.GetValue(),
@@ -552,9 +557,9 @@ class MoveRelative(eg.ActionBase):
     def Configure(self, x=0, y=0, useAlternateMethod=False):
         panel = eg.ConfigPanel()
         text = self.text
-        
+
         uAMCB = panel.CheckBox(useAlternateMethod, text.label_AM)
-        
+
         xCB = panel.CheckBox(x is not None, text.text1)
         def HandleXCheckBox(event):
             xCtrl.Enable(event.IsChecked())

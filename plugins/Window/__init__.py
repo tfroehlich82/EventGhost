@@ -1,24 +1,29 @@
 # -*- coding: utf-8 -*-
 #
 # This file is a plugin for EventGhost.
-# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import eg
 
 eg.RegisterPlugin(
     name = "Window",
-    author = "Bitmonster & blackwind",
+    author = (
+        "Bitmonster",
+        "blackwind",
+    ),
     version = "1.1.2",
     description = (
         "Actions that are related to the control of windows on the desktop, "
@@ -178,8 +183,8 @@ class BringToFront(eg.ActionBase):
         for hwnd in GetTargetWindows():
             BringHwndToFront(hwnd)
             if self.plugin.iconDict.has_key(hwnd):
-                try:  
-                    trayIcon = self.plugin.iconDict[hwnd] 
+                try:
+                    trayIcon = self.plugin.iconDict[hwnd]
                     del self.plugin.iconDict[hwnd]
                     trayIcon.RemoveIcon()
                     trayIcon.Destroy()
@@ -362,7 +367,7 @@ class Restore(eg.ActionBase):
         for hwnd in GetTopLevelOfTargetWindows():
             ShowWindow(hwnd, SW_RESTORE)
             if self.plugin.iconDict.has_key(hwnd):
-                try:  
+                try:
                     trayIcon = self.plugin.iconDict[hwnd]
                     del self.plugin.iconDict[hwnd]
                     trayIcon.RemoveIcon()
@@ -751,7 +756,7 @@ class MinimizeToTray(eg.ActionBase):
 
             def OnClick(*dummyArgs):
                 wx.CallAfter(OnClick2)
-                
+
             trayIcon.Bind(wx.EVT_TASKBAR_LEFT_UP, OnClick)
             wx.CallAfter(ShowWindow, hwnd, 0)
 

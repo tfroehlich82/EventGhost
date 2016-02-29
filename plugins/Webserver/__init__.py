@@ -2,23 +2,23 @@
 version = "3.12"
 #
 # This file is part of EventGhost.
-# Copyright (C) 2005-2015 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 #
 # Changelog (in reverse chronological order):
 # -------------------------------------------
-
 # 3.12 by by Pako 2016-02-15 17:15 UTC+1
 #     - bugfix (Send all values)
 # 3.11 by by Pako 2016-02-06 08:44 UTC+1
@@ -93,14 +93,19 @@ import eg
 
 eg.RegisterPlugin(
     name = "Webserver",
-    author = "Bitmonster & Pako & Sem;colon & krambriw",
+    author = (
+        "Bitmonster",
+        "Pako",
+        "Sem;colon",
+        "krambriw",
+    ),
     version = version,
     guid = "{E4305D8E-A3D3-4672-B06E-4EA1F0F6C673}",
     description = ur'''<rst>
 Implements a small webserver, that you can use to generate events
 through HTML-pages and WebSocket.
 
-Implementation of WebSocket support was made possible through the article_, 
+Implementation of WebSocket support was made possible through the article_,
 published on the SevenWatt_ web..
 
 Plugin version: %s
@@ -108,7 +113,7 @@ Plugin version: %s
 .. _article:     http://www.sevenwatt.com/main/websocket-html-webserver-python/
 .. _SevenWatt:   http://www.sevenwatt.com/main/
 ''' % version,
-    createMacrosOnAdd = True,    
+    createMacrosOnAdd = True,
     canMultiLoad = True,
     icon = (
         "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeT"
@@ -141,12 +146,12 @@ from posixpath import splitext, normpath
 from time import sleep, strftime
 from datetime import datetime as dt
 from urllib import unquote, unquote_plus
-from urllib2 import urlopen, Request as urlRequest 
+from urllib2 import urlopen, Request as urlRequest
 from httplib import HTTPResponse
 from jinja2 import BaseLoader, TemplateNotFound, Environment
 from copy import deepcopy as cpy
 from json import dumps, loads
-from re import IGNORECASE, compile as re_compile 
+from re import IGNORECASE, compile as re_compile
 from struct import pack, unpack
 from base64 import b64encode, encodestring as b64_encStr
 from hashlib import sha1, md5
@@ -162,12 +167,12 @@ from websocket import WebSocketApp
 SYS_VSCROLL_X = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
 
 CLOSE_CODE = {
-    "\x03\xe8":"NORMAL_CLOSURE", 
-    "\x03\xe9":"GOING_AWAY", 
-    "\x03\xea":"PROTOCOL_ERROR", 
-    "\x03\xee":"ABNORMAL_CLOSURE", 
-    "\x03\xf3":"SERVER_ERROR", 
-    "\x03\x00":"UNKNOWN_ERROR", 
+    "\x03\xe8":"NORMAL_CLOSURE",
+    "\x03\xe9":"GOING_AWAY",
+    "\x03\xea":"PROTOCOL_ERROR",
+    "\x03\xee":"ABNORMAL_CLOSURE",
+    "\x03\xf3":"SERVER_ERROR",
+    "\x03\x00":"UNKNOWN_ERROR",
 }
 
 
@@ -179,9 +184,9 @@ METHODS = (
     "ExecuteScript",
     "TriggerEvent",
 
-    "GetGlobalValue",   
-    "GetValue",   
-    "GetPersistentValue",   
+    "GetGlobalValue",
+    "GetValue",
+    "GetPersistentValue",
     "GetAllValues",
 
     "GetChangedValues",
@@ -215,7 +220,7 @@ def ClientChoice(evt, text, panel, id3, id4, cl_ip, cl_port, size2, rBMC):
     portCtrl = wx.TextCtrl(panel, id4, cl_port)
     dynamicSizer.Add(portLabel,(2,0),(1,1),flag = wx.TOP, border = 10)
     dynamicSizer.Add(portCtrl,(3,0),(1,1))
-    panel.sizer.Layout()            
+    panel.sizer.Layout()
     if evt:
         evt.Skip()
 #===============================================================================
@@ -230,7 +235,7 @@ class WebSocketClient(WebSocketApp):
         }
         if login is not None:
             password = password if password is not None else ""
-            kwargs['header']=["Authorization:Basic " + b64encode(login+":"+password)] 
+            kwargs['header']=["Authorization:Basic " + b64encode(login+":"+password)]
         WebSocketApp.__init__(self, url, **kwargs)
         self.url = url
         self.conTime = None
@@ -310,7 +315,7 @@ class VarTable(wx.ListCtrl, TextEditMixin):
         self.editor.SetBackgroundColour(wx.Colour(135, 206, 255))
 
         self.InsertColumn(0, txt.vrbl)
-        self.InsertColumn(1, txt.defVal, wx.LIST_FORMAT_LEFT)       
+        self.InsertColumn(1, txt.defVal, wx.LIST_FORMAT_LEFT)
         self.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
         self.SetColumnWidth(1, wx.LIST_AUTOSIZE_USEHEADER)
         self.InsertStringItem(0, "dummy")
@@ -458,7 +463,7 @@ class VariableDialog(wx.Frame):
                 varTable.GetSelectedItemCount()
                 event.Skip()
             varTable.Bind(wx.EVT_LIST_ITEM_SELECTED, OnItemSelected)
-            varTable.Bind(wx.EVT_LIST_ITEM_DESELECTED, OnItemSelected)       
+            varTable.Bind(wx.EVT_LIST_ITEM_DESELECTED, OnItemSelected)
             btn1 = wx.Button(panel, wx.ID_OK)
             btn1.SetLabel(text.ok)
             btn1.SetDefault()
@@ -511,11 +516,11 @@ class VariableDialog(wx.Frame):
             self.GetParent().GetParent().Raise()
             self.Destroy()
         self.Bind(wx.EVT_CLOSE, onClose)
-   
+
         def onCancel(evt):
             self.Close()
         btn2.Bind(wx.EVT_BUTTON, onCancel)
-             
+
         self.SetSize((500, -1))
         self.SetMinSize((500, -1))
         sizer.Layout()
@@ -612,7 +617,7 @@ class ClientsDialog(wx.Frame):
             clientListCtrl.GetSelectedItemCount()
             event.Skip()
         clientListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, OnItemSelected)
-        clientListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, OnItemSelected)       
+        clientListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, OnItemSelected)
         btn1 = wx.Button(panel, wx.ID_OK)
         btn1.SetLabel(text.ok)
         btn1.SetDefault()
@@ -649,11 +654,11 @@ class ClientsDialog(wx.Frame):
             self.GetParent().GetParent().Raise()
             self.Destroy()
         self.Bind(wx.EVT_CLOSE, onClose)
-   
+
         def onCancel(evt):
             self.Close()
         btn2.Bind(wx.EVT_BUTTON, onCancel)
-             
+
         self.SetMinSize(self.GetSize())
         sizer.Layout()
         self.Raise()
@@ -671,7 +676,7 @@ class ClientsDialog(wx.Frame):
                 ).strftime('%Y-%m-%d %H:%M:%S'))
         cnt = table.GetItemCount()
         abortAllButtonCli = wx.FindWindowById(self.buttonIds[1])
-        abortAllButtonCli.Enable(cnt > 0) 
+        abortAllButtonCli.Enable(cnt > 0)
 #===============================================================================
 
 class ServersDialog(wx.Frame):
@@ -762,7 +767,7 @@ class ServersDialog(wx.Frame):
             serverListCtrl.GetSelectedItemCount()
             event.Skip()
         serverListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, OnItemSelected)
-        serverListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, OnItemSelected)       
+        serverListCtrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, OnItemSelected)
         btn1 = wx.Button(panel, wx.ID_OK)
         btn1.SetLabel(text.ok)
         btn1.SetDefault()
@@ -799,11 +804,11 @@ class ServersDialog(wx.Frame):
             self.GetParent().GetParent().Raise()
             self.Destroy()
         self.Bind(wx.EVT_CLOSE, onClose)
-   
+
         def onCancel(evt):
             self.Close()
         btn2.Bind(wx.EVT_BUTTON, onCancel)
-             
+
         self.SetMinSize(self.GetSize())
         sizer.Layout()
         self.Raise()
@@ -823,7 +828,7 @@ class ServersDialog(wx.Frame):
             table.SetStringItem(i, 2, ts)
         cnt = table.GetItemCount()
         abortAllButtonSrv = wx.FindWindowById(self.buttonIds[1])
-        abortAllButtonSrv.Enable(cnt > 0) 
+        abortAllButtonSrv.Enable(cnt > 0)
 #===============================================================================
 
 class FileLoader(BaseLoader):
@@ -921,7 +926,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
     repeatTimer = None
     environment = None
     plugin = None
-    
+
     def getClientAddress(self):
         ip = self.client_address
         return (ip[0].replace('::ffff:', ''), ip[1])
@@ -959,7 +964,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
                 if methodName == "Ping":
                     id = data["id"] if "id" in data else -1
                     content = dumps({
-                        "method":"Pong", 
+                        "method":"Pong",
                         "id":id,
                         "client_address":self.clAddr
                     })
@@ -980,9 +985,9 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
                     pass
             else:
                 self.plugin.TriggerEvent(
-                    methodName, 
+                    methodName,
                     payload = (self.clAddr, data)
-                )        
+                )
 
     def on_ws_closed(self):
         self.handshake_done = False
@@ -1013,7 +1018,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
                 SimpleHTTPRequestHandler.handle_one_request(self)
             except Exception, exc:
                 eg.PrintError(
-                    "Webserver: Exception on handle_one_request:", 
+                    "Webserver: Exception on handle_one_request:",
                     unicode(exc)
                 )
             #SimpleHTTPRequestHandler.handle_one_request(self)
@@ -1076,7 +1081,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
             #    opcode = _close
             #    eg.PrintNotice('decoded: '+decoded)
             #    decoded = 'Masked frame from server'
-            
+
             # close
             if opcode == _close:
                decoded = decoded if decoded in CLOSE_CODE else "\x03\x00"
@@ -1086,7 +1091,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
             elif opcode == _ping:
                 #print 'ping'
                 resp = ['Pong', self.client_address]
-                self.write_message(repr(resp)) 
+                self.write_message(repr(resp))
             # pong
             elif opcode == _pong:
                 pass
@@ -1094,8 +1099,8 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
             elif opcode == _stream or opcode == _text or opcode == _binary:
                 self.on_ws_message(decoded)
 ###
-                
-              
+
+
     def write_message(self, message):
         try:
 ### Filandre
@@ -1173,7 +1178,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
             self.plugin.TriggerEvent(
                 self.plugin.text.wsClientConn,
                 payload = [self.clAddr]
-            )        
+            )
         except:
             eg.PrintTraceback()
 
@@ -1198,7 +1203,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         self.send_response(401)
         self.send_header('WWW-Authenticate','Basic realm="%s"' % self.authRealm)
         self.send_header('Content-type', 'text/html')
-        self.end_headers()        
+        self.end_headers()
         return False
 
 
@@ -1482,7 +1487,7 @@ class WsSendMessage(eg.ActionBase):
         )
         return self.plugin.ServerSendMessage(
             client,
-            message,           
+            message,
         )
 
 
@@ -1530,7 +1535,7 @@ class WsSendMessage(eg.ActionBase):
         middleSizer.Add((20,-1),0,wx.LEFT|wx.EXPAND)
         middleSizer.Add(tmpSizer,0,wx.LEFT|wx.EXPAND)
         panel.sizer.Add(middleSizer, 0, wx.TOP|wx.EXPAND, 8)
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -1552,7 +1557,7 @@ class WsSendMessage(eg.ActionBase):
         messSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, text.mess),
             wx.VERTICAL
-        )        
+        )
         parsCtrl = wx.CheckBox(panel, -1, self.plugin.text.parsing)
         parsCtrl.SetValue(pars)
         panel.sizer.Add(messSizer, 0, wx.EXPAND|wx.TOP, 8)
@@ -1651,7 +1656,7 @@ class WsSendValue(eg.ActionBase):
         middleSizer.Add((20,-1),0,wx.LEFT|wx.EXPAND)
         middleSizer.Add(tmpSizer,0,wx.LEFT|wx.EXPAND)
         panel.sizer.Add(middleSizer, 0, wx.TOP|wx.EXPAND, 8)
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -1689,10 +1694,10 @@ class WsSendValue(eg.ActionBase):
             )
 #===============================================================================
 
-class WsBroadcastAllValues(eg.ActionBase):  
+class WsBroadcastAllValues(eg.ActionBase):
 
     def __call__(self):
-        values = self.plugin.GetAllValues()  
+        values = self.plugin.GetAllValues()
         return self.plugin.BroadcastMessage(
             #dumps({'method':'Values', 'kwargs':values})
             dumps(values)
@@ -1759,7 +1764,7 @@ class WsSendAllValues(eg.ActionBase):
         middleSizer.Add((20,-1),0,wx.LEFT|wx.EXPAND)
         middleSizer.Add(tmpSizer,0,wx.LEFT|wx.EXPAND)
         panel.sizer.Add(middleSizer, 0, wx.TOP|wx.EXPAND, 8)
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -1797,7 +1802,7 @@ class WsBroadcastData(eg.ActionBase):
         onlyChange = "Data send only if it has been changed"
         cond = "Condition for data sending (python expression):"
         period = "Sending period [s]:"
- 
+
 
     def Task(self, plugin, dataName):
         if self.plugin.info.isStarted:
@@ -1808,8 +1813,8 @@ class WsBroadcastData(eg.ActionBase):
                 dataName
             )
 
-        data = self.plugin.EvalString(self.data2send)    
-        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True   
+        data = self.plugin.EvalString(self.data2send)
+        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True
         if cond:
             if data != self.data or not self.onlyChange:
                 self.plugin.BroadcastMessage(
@@ -1818,7 +1823,7 @@ class WsBroadcastData(eg.ActionBase):
                     )
                 )
         self.data=data
-        
+
 
     def __call__(
         self,
@@ -1836,8 +1841,8 @@ class WsBroadcastData(eg.ActionBase):
         if self.value:
             self.Task(self.plugin, dataName)
         else:
-            data = self.plugin.EvalString(data2send)    
-            cond = self.plugin.EvalString(cond) if cond != "" else True   
+            data = self.plugin.EvalString(data2send)
+            cond = self.plugin.EvalString(cond) if cond != "" else True
             if cond:
                 self.plugin.BroadcastMessage(
                     dumps(
@@ -1890,7 +1895,7 @@ class WsBroadcastData(eg.ActionBase):
             perSizer.Add((-1,-1),1,wx.EXPAND)
             perSizer.Add(changeCtrl,0,wx.TOP,4)
             mainSizer.Add(perSizer,0,wx.EXPAND|wx.TOP,10)
-       
+
         while panel.Affirmed():
             change = changeCtrl.GetValue() if self.value else None
             period = periodCtrl.GetValue() if self.value else None
@@ -1900,7 +1905,7 @@ class WsBroadcastData(eg.ActionBase):
                 condCtrl.GetValue(),
                 change,
                 period
-            )    
+            )
 #===============================================================================
 
 class WsPeriodicallySendData(eg.ActionBase):
@@ -1921,8 +1926,8 @@ class WsPeriodicallySendData(eg.ActionBase):
                     client,
                     dataName
                 )
-        data = self.plugin.EvalString(self.data2send)    
-        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True               
+        data = self.plugin.EvalString(self.data2send)
+        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True
         if cond:
             if data != self.data or not self.onlyChange:
                 self.plugin.ServerSendMessage(
@@ -1963,8 +1968,8 @@ class WsPeriodicallySendData(eg.ActionBase):
         if self.value:
             self.Task(self.plugin, client, dataName)
         else:
-            data = self.plugin.EvalString(data2send)    
-            cond = self.plugin.EvalString(cond) if cond != "" else True   
+            data = self.plugin.EvalString(data2send)
+            cond = self.plugin.EvalString(cond) if cond != "" else True
             if cond:
                 self.plugin.ServerSendMessage(
                     client,
@@ -1973,7 +1978,7 @@ class WsPeriodicallySendData(eg.ActionBase):
                         'dataName':dataName,
                         'data':data
                     }),
-                )        
+                )
 
 
     def GetLabel(
@@ -2067,7 +2072,7 @@ class WsPeriodicallySendData(eg.ActionBase):
             perSizer.Add((-1,-1),1,wx.EXPAND)
             perSizer.Add(changeCtrl,0,wx.TOP,4)
             mainSizer.Add(perSizer,0,wx.EXPAND|wx.TOP,10)
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -2116,7 +2121,7 @@ class WsSendCommand(eg.ActionBase):
         kwArgs = "Keyw. arguments:"
         onlyChange = "Data send only if it has been changed"
         period = "Sending period [s]:"
-        
+
 
     def Task(self, plugin, client, cmdName):
         if self.plugin.info.isStarted:
@@ -2138,13 +2143,13 @@ class WsSendCommand(eg.ActionBase):
                 args.extend(othArgs)
             except:
                 pass
-        kwargs = {}        
+        kwargs = {}
         if kwArgs != "":
             try:
                 kwargs = dict(self.plugin.EvalString(kwArgs, False))
             except:
                 pass
-        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True   
+        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True
         if cond:
             if args != self.args or kwargs != self.kwargs or not self.onlyChange:
                 self.plugin.ServerSendMessage(
@@ -2177,7 +2182,7 @@ class WsSendCommand(eg.ActionBase):
         onlyChange=True,
         period=5.0
     ):
-        cmdName = self.plugin.EvalString(cmdName)    
+        cmdName = self.plugin.EvalString(cmdName)
         client = eg.event.payload[0] if modeClient else (
             eg.ParseString(cl_ip),
             int(eg.ParseString(cl_port))
@@ -2210,12 +2215,12 @@ class WsSendCommand(eg.ActionBase):
                     kwargs = dict(self.plugin.EvalString(kwArgs, False))
                 except:
                     pass
-            cond = self.plugin.EvalString(cond) if cond != "" else True   
+            cond = self.plugin.EvalString(cond) if cond != "" else True
             if cond:
                 #client = eg.event.payload[0] if modeClient else (
                 #    eg.ParseString(cl_ip),
                 #    int(eg.ParseString(cl_port))
-                #)                
+                #)
                 self.plugin.ServerSendMessage(
                     client,
                     dumps(
@@ -2225,7 +2230,7 @@ class WsSendCommand(eg.ActionBase):
                             'args':args,
                             'kwargs':kwargs
                         }
-                    ),                    
+                    ),
                 )
 
 
@@ -2308,7 +2313,7 @@ class WsSendCommand(eg.ActionBase):
         middleSizer.Add(tmpSizer,0,wx.LEFT|wx.EXPAND)
         panel.sizer.Add(middleSizer, 0, wx.TOP|wx.LEFT|wx.RIGHT|wx.EXPAND, 8)
 
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -2377,7 +2382,7 @@ class WsSendCommand(eg.ActionBase):
             perSizer.Add(changeCtrl,0,wx.TOP,4)
             mainSizer.Add(perSizer,0,wx.EXPAND)
         panel.sizer.Add(mainSizer,0,wx.ALL|wx.EXPAND,8)
-       
+
         while panel.Affirmed():
             modeClient = radioBoxModeClient.GetSelection()
             if not modeClient:
@@ -2398,7 +2403,7 @@ class WsSendCommand(eg.ActionBase):
                 kwCtrl.GetValue(),
                 change,
                 period
-            )       
+            )
 #===============================================================================
 
 class WsSendUniversal(eg.ActionBase):
@@ -2410,7 +2415,7 @@ class WsSendUniversal(eg.ActionBase):
         kwArgs = "Keyw. arguments:"
         onlyChange = "Data send only if it has been changed"
         period = "Sending period [s]:"
-        
+
 
     def Task(self, plugin, client, method):
         if plugin.info.isStarted:
@@ -2427,13 +2432,13 @@ class WsSendUniversal(eg.ActionBase):
                 args = list(self.plugin.EvalString(self.othArgs))
             except:
                 pass
-        kwargs = {}        
+        kwargs = {}
         if self.kwArgs != "":
             try:
                 kwargs = dict(self.plugin.EvalString(self.kwArgs, False))
             except:
                 pass
-        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True   
+        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True
         if cond:
             if args != self.args or kwargs != self.kwargs or not self.onlyChange:
                 self.plugin.ServerSendMessage(
@@ -2486,7 +2491,7 @@ class WsSendUniversal(eg.ActionBase):
                     kwargs = dict(self.plugin.EvalString(kwArgs, False))
                 except:
                     pass
-            cond = self.plugin.EvalString(cond) if cond != "" else True   
+            cond = self.plugin.EvalString(cond) if cond != "" else True
             if cond:
                 self.plugin.ServerSendMessage(
                     client,
@@ -2496,7 +2501,7 @@ class WsSendUniversal(eg.ActionBase):
                             'args':args,
                             'kwargs':kwargs
                         }
-                    ),                    
+                    ),
                 )
 
 
@@ -2569,7 +2574,7 @@ class WsSendUniversal(eg.ActionBase):
         middleSizer.Add(tmpSizer,0,wx.LEFT|wx.EXPAND)
         panel.sizer.Add(middleSizer, 0, wx.TOP|wx.LEFT|wx.RIGHT|wx.EXPAND, 8)
 
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -2632,7 +2637,7 @@ class WsSendUniversal(eg.ActionBase):
             perSizer.Add(changeCtrl,0,wx.TOP,4)
             mainSizer.Add(perSizer,0,wx.EXPAND)
         panel.sizer.Add(mainSizer,0,wx.ALL|wx.EXPAND,8)
-       
+
         while panel.Affirmed():
             modeClient = radioBoxModeClient.GetSelection()
             if not modeClient:
@@ -2650,7 +2655,7 @@ class WsSendUniversal(eg.ActionBase):
                 kwCtrl.GetValue(),
                 change,
                 period
-            )       
+            )
 #===============================================================================
 
 class WsBroadcastUniversal(eg.ActionBase):
@@ -2662,7 +2667,7 @@ class WsBroadcastUniversal(eg.ActionBase):
         kwArgs = "Keyw. arguments:"
         onlyChange = "Data send only if it has been changed"
         period = "Sending period [s]:"
-        
+
 
     def Task(self, plugin, method):
         if plugin.info.isStarted:
@@ -2679,13 +2684,13 @@ class WsBroadcastUniversal(eg.ActionBase):
                 args = list(self.plugin.EvalString(self.othArgs))
             except:
                 pass
-        kwargs = {}        
+        kwargs = {}
         if self.kwArgs != "":
             try:
                 kwargs = dict(self.plugin.EvalString(self.kwArgs, False))
             except:
                 pass
-        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True   
+        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True
         if cond:
             if args != self.args or kwargs != self.kwargs or not self.onlyChange:
                 self.plugin.BroadcastMessage(
@@ -2732,7 +2737,7 @@ class WsBroadcastUniversal(eg.ActionBase):
             self.kwargs = kwargs
             self.Task(self.plugin, method)
         else:
-            cond = self.plugin.EvalString(cond) if cond != "" else True   
+            cond = self.plugin.EvalString(cond) if cond != "" else True
             if cond:
                 self.plugin.BroadcastMessage(
                     dumps(
@@ -2741,7 +2746,7 @@ class WsBroadcastUniversal(eg.ActionBase):
                             'args':args,
                             'kwargs':kwargs
                         }
-                    ),                    
+                    ),
                 )
 
 
@@ -2814,7 +2819,7 @@ class WsBroadcastUniversal(eg.ActionBase):
             perSizer.Add(changeCtrl,0,wx.TOP,4)
             mainSizer.Add(perSizer,0,wx.EXPAND)
         panel.sizer.Add(mainSizer,0,wx.ALL|wx.EXPAND,8)
-       
+
         while panel.Affirmed():
             change = changeCtrl.GetValue() if self.value else None
             period = periodCtrl.GetValue() if self.value else None
@@ -2825,7 +2830,7 @@ class WsBroadcastUniversal(eg.ActionBase):
                 kwCtrl.GetValue(),
                 change,
                 period
-            )       
+            )
 #===============================================================================
 
 class WsBroadcastCommand(eg.ActionBase):
@@ -2840,7 +2845,7 @@ class WsBroadcastCommand(eg.ActionBase):
         kwArgs = "Keyw. arguments:"
         onlyChange = "Data send only if it has been changed"
         period = "Sending period [s]:"
-        
+
 
     def Task(self, plugin, cmdName):
         if self.plugin.info.isStarted:
@@ -2850,7 +2855,7 @@ class WsBroadcastCommand(eg.ActionBase):
                 plugin,
                 cmdName
             )
-        args = [self.plugin.EvalString(self.arg1)] if self.arg1 != "" else [] 
+        args = [self.plugin.EvalString(self.arg1)] if self.arg1 != "" else []
         if self.arg2 != "":
             args.append(self.plugin.EvalString(self.arg2))
         if self.arg3 != "":
@@ -2867,7 +2872,7 @@ class WsBroadcastCommand(eg.ActionBase):
                 kwargs = dict(self.plugin.EvalString(self.kwArgs, False))
             except:
                 pass
-        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True   
+        cond = self.plugin.EvalString(self.cond) if self.cond != "" else True
         if cond:
             if args != self.args or kwargs != self.kwargs or not self.onlyChange:
                 self.plugin.BroadcastMessage(
@@ -2896,7 +2901,7 @@ class WsBroadcastCommand(eg.ActionBase):
         onlyChange=True,
         period=5.0
     ):
-        cmdName = self.plugin.EvalString(cmdName)    
+        cmdName = self.plugin.EvalString(cmdName)
         if self.value:
             self.arg1 = arg1
             self.arg2 = arg2
@@ -2910,7 +2915,7 @@ class WsBroadcastCommand(eg.ActionBase):
             self.kwargs = None
             self.Task(self.plugin, cmdName)
         else:
-            args = [self.plugin.EvalString(arg1)] if arg1 != "" else [] 
+            args = [self.plugin.EvalString(arg1)] if arg1 != "" else []
             if arg2 != "":
                 args.append(self.plugin.EvalString(arg2))
             if arg3 != "":
@@ -2927,7 +2932,7 @@ class WsBroadcastCommand(eg.ActionBase):
                     kwargs = dict(self.plugin.EvalString(kwArgs, False))
                 except:
                     pass
-            cond = self.plugin.EvalString(cond) if cond != "" else True   
+            cond = self.plugin.EvalString(cond) if cond != "" else True
             if cond:
                 self.plugin.BroadcastMessage(
                     dumps(
@@ -3004,8 +3009,8 @@ class WsBroadcastCommand(eg.ActionBase):
             perSizer.Add(periodCtrl,0,wx.LEFT,1)
             perSizer.Add((-1,-1),1,wx.EXPAND)
             perSizer.Add(changeCtrl,0,wx.TOP,4)
-            mainSizer.Add(periodLabel,0,wx.TOP,3)      
-            mainSizer.Add(perSizer,0,wx.EXPAND)      
+            mainSizer.Add(periodLabel,0,wx.TOP,3)
+            mainSizer.Add(perSizer,0,wx.EXPAND)
 
         while panel.Affirmed():
             change = changeCtrl.GetValue() if self.value else None
@@ -3020,14 +3025,14 @@ class WsBroadcastCommand(eg.ActionBase):
                 kwCtrl.GetValue(),
                 change,
                 period
-            )       
+            )
 #===============================================================================
 
 class WsBroadcastMessage(eg.ActionBase):
 
     class text:
         mess = "Message for broadcast:"
-    
+
     def __call__(self, message = "", pars = False):
         if not pars:
             message = self.plugin.EvalString(message)
@@ -3043,7 +3048,7 @@ class WsBroadcastMessage(eg.ActionBase):
         messSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, text.mess),
             wx.VERTICAL
-        )        
+        )
         panel.sizer.Add(messSizer, 0, wx.EXPAND|wx.TOP, 15)
         messSizer.Add(messCtrl, 0, wx.EXPAND)
         messSizer.Add(parsCtrl, 0, wx.EXPAND|wx.TOP, 3)
@@ -3059,7 +3064,7 @@ class WsBroadcastValue(eg.ActionBase):
 
     class text:
         varnames = "Variable name or list of variables (separated by commas):"
-        err = 'Error in action "Websocket broadcast values(%s)"'    
+        err = 'Error in action "Websocket broadcast values(%s)"'
 
     def __call__(self, varnames = ""):
         try:
@@ -3088,11 +3093,11 @@ class WsBroadcastValue(eg.ActionBase):
         mainSizer.Add(varnamesLbl)
         mainSizer.Add(varnamesCtrl, 0, wx.EXPAND|wx.TOP, 1)
         panel.sizer.Add(mainSizer, 0, wx.EXPAND|wx.ALL, 10)
-       
+
         while panel.Affirmed():
             panel.SetResult(
                 varnamesCtrl.GetValue(),
-            )       
+            )
 #===============================================================================
 
 class WsStopClientPeriodicTasks(eg.ActionBase):
@@ -3158,7 +3163,7 @@ class WsStopClientPeriodicTasks(eg.ActionBase):
         middleSizer.Add((20,-1),0,wx.LEFT|wx.EXPAND)
         middleSizer.Add(tmpSizer,0,wx.LEFT|wx.EXPAND)
         panel.sizer.Add(middleSizer, 0, wx.TOP|wx.EXPAND, 8)
-        panel.sizer.Layout()            
+        panel.sizer.Layout()
         size2 = (-1, tmpSizer.GetMinSize()[1])
 
         def OnClientChoice(evt = None):
@@ -3223,8 +3228,8 @@ class WsStopPeriodicTasks(eg.ActionBase):
 
         while panel.Affirmed():
             panel.SetResult(taskCtrl.GetValue(),)
-#===============================================================================     
-       
+#===============================================================================
+
 class SetClientsFlags(eg.ActionBase):
 
     class text:
@@ -3236,7 +3241,7 @@ class SetClientsFlags(eg.ActionBase):
             key = eg.ParseString(varname) if not pars else varname
             self.plugin.SetClientsFlags(key)
         except:
-            eg.PrintError(self.text.err % str(varname))       
+            eg.PrintError(self.text.err % str(varname))
 
     def Configure(self, varname = "", pars = False):
         panel = eg.ConfigPanel(self)
@@ -3253,9 +3258,9 @@ class SetClientsFlags(eg.ActionBase):
             panel.SetResult(
                 varnameCtrl.GetValue(),
                 parsCtrl.GetValue()
-            )       
+            )
 #===============================================================================
-   
+
 class GetValue(eg.ActionBase):
 
     class text:
@@ -3268,7 +3273,7 @@ class GetValue(eg.ActionBase):
             return self.plugin.GetValue(key)
         except:
             eg.PrintError(self.text.err % str(varname))
-       
+
     def Configure(self, varname = "", pars = False):
         panel = eg.ConfigPanel(self)
         varnameCtrl = panel.TextCtrl(varname)
@@ -3280,12 +3285,12 @@ class GetValue(eg.ActionBase):
         mainSizer.Add(varnameCtrl, 0, wx.EXPAND|wx.TOP, 1)
         mainSizer.Add(parsCtrl, 0, wx.TOP, 4)
         panel.sizer.Add(mainSizer, 0, wx.EXPAND|wx.ALL, 10)
-       
+
         while panel.Affirmed():
             panel.SetResult(
                 varnameCtrl.GetValue(),
                 parsCtrl.GetValue()
-            )       
+            )
 #===============================================================================
 
 class GetPersistentValue(GetValue):
@@ -3299,7 +3304,7 @@ class GetPersistentValue(GetValue):
             key = eg.ParseString(varname) if not pars else varname
             return self.plugin.GetPersistentValue(key)
         except:
-            eg.PrintError(self.text.err % str(varname))       
+            eg.PrintError(self.text.err % str(varname))
 #===============================================================================
 
 class SetValue(eg.ActionBase):
@@ -3325,7 +3330,7 @@ class SetValue(eg.ActionBase):
 
     def GetLabel(self, varname, value, pars1, pars2):
         return "%s: %s: %s" % (self.name, varname, value)
-       
+
     def Configure(
         self,
         varname = "",
@@ -3356,7 +3361,7 @@ class SetValue(eg.ActionBase):
                 valueCtrl.GetValue(),
                 pars1Ctrl.GetValue(),
                 pars2Ctrl.GetValue(),
-            )       
+            )
 #===============================================================================
 
 class SetPersistentValue(SetValue):
@@ -3378,7 +3383,7 @@ class SetPersistentValue(SetValue):
             val = eg.ParseString(value) if not pars2 else value
             self.plugin.SetPersistentValue(key, val)
         except:
-            eg.PrintError(self.text.err % (str(varname), str(value)))      
+            eg.PrintError(self.text.err % (str(varname), str(value)))
 #===============================================================================
 
 class SendEvent(eg.ActionBase):
@@ -3389,7 +3394,7 @@ class SendEvent(eg.ActionBase):
         port ="Port:"
         username = "Username:"
         password = "Password:"
-        errmsg = "Target server returned status %s"       
+        errmsg = "Target server returned status %s"
 
     def __call__(
         self,
@@ -3485,15 +3490,15 @@ class SendEvent(eg.ActionBase):
         box=wx.GridBagSizer(2, 5)
         box.AddGrowableCol(1)
         box.Add(panel.StaticText(text.event), (0, 0), flag = wx.TOP, border=12)
-        box.Add(eventCtrl, (0, 1), flag = fl, border=9)    
-        box.Add(parsCtrl, (1, 0), (1, 2))    
-        box.Add(panel.StaticText(text.host), (2, 0), flag = wx.TOP, border=12)    
+        box.Add(eventCtrl, (0, 1), flag = fl, border=9)
+        box.Add(parsCtrl, (1, 0), (1, 2))
+        box.Add(panel.StaticText(text.host), (2, 0), flag = wx.TOP, border=12)
         box.Add(hostCtrl, (2, 1), flag = fl, border=9)
-        box.Add(panel.StaticText(text.port), (3, 0), flag = wx.TOP, border=12)    
+        box.Add(panel.StaticText(text.port), (3, 0), flag = wx.TOP, border=12)
         box.Add(portCtrl, (3, 1), flag = wx.TOP, border=9)
-        box.Add(panel.StaticText(text.username), (4, 0), flag=wx.TOP, border=12)    
-        box.Add(userCtrl, (4, 1), flag = fl, border=9)       
-        box.Add(panel.StaticText(text.password), (5, 0), flag=wx.TOP, border=12)    
+        box.Add(panel.StaticText(text.username), (4, 0), flag=wx.TOP, border=12)
+        box.Add(userCtrl, (4, 1), flag = fl, border=9)
+        box.Add(panel.StaticText(text.password), (5, 0), flag=wx.TOP, border=12)
         box.Add(passwordCtrl, (5, 1), flag = fl, border=9)
         panel.sizer.Add(box, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 10)
 
@@ -3530,21 +3535,21 @@ class SendEventExt(eg.ActionBase):
             handle = urlopen(req)
         except IOError, e:
             # If we fail then the page could be protected
-            if not hasattr(e, 'code') or e.code != 401:                 
+            if not hasattr(e, 'code') or e.code != 401:
                 # we got an error - but not a 401 error
                 print text.msg1
                 print text.msg2
                 print "ERROR "+str(e.code)
                 return None
-            authline = e.headers.get('www-authenticate', '')               
+            authline = e.headers.get('www-authenticate', '')
             # this gets the www-authenticat line from the headers - which has the authentication scheme and realm in it
             if not authline:
                 print text.msg3
                 return None
-            authobj = re_compile(r'''(?:\s*www-authenticate\s*:)?\s*(\w*)\s+realm=['"](\w+)['"]''', IGNORECASE)         
+            authobj = re_compile(r'''(?:\s*www-authenticate\s*:)?\s*(\w*)\s+realm=['"](\w+)['"]''', IGNORECASE)
             # this regular expression is used to extract scheme and realm
             matchobj = authobj.match(authline)
-            if not matchobj:                                       
+            if not matchobj:
                 # if the authline isn't matched by the regular expression then something is wrong
                 print text.msg4
                 #authheader=b'Basic ' + b64encode(user + b':' + password)
@@ -3611,7 +3616,7 @@ class Webserver(eg.PluginBase):
         documentRoot = "HTML documents root:"
         eventPrefix = "Event prefix:"
         authBox = "Basic Authentication"
-        serverTitle = "Server title"        
+        serverTitle = "Server title"
         authRealm = "Realm:"
         authUsername = "Username:"
         authPassword = "Password:"
@@ -3647,7 +3652,7 @@ class Webserver(eg.PluginBase):
         modeClientChoice = (
             'Explicitly (or Python expression)',
             'From eg.event.payload[0]',
-        )    
+        )
         host = "TCP/IP address:"
         wsClientDisconn = "WsClientDisconnected"
         wsClientConn = "WsClientConnected"
@@ -3681,8 +3686,8 @@ class Webserver(eg.PluginBase):
             "Connected since ...",
         )
         abort = "Disconnect"
-        abortAll = "Disconnect all"    
-        refresh = "Refresh"    
+        abortAll = "Disconnect all"
+        refresh = "Refresh"
 
     def __init__(self):
         self.AddEvents()
@@ -3745,8 +3750,8 @@ class Webserver(eg.PluginBase):
         sr = int(not (isfile(certfile) and isfile(keyfile)))
         print self.text.started % (self.text.secur[sr], port)
         eg.PrintNotice("Persistent values: " + repr(self.pubPerVars))
-        
-        
+
+
     def __stop__(self):
         self.server.Stop()
         print self.text.stopped % self.port
@@ -3756,8 +3761,8 @@ class Webserver(eg.PluginBase):
     def EndLastEnduringEvent(self):
         if self.lastEnduringEvent:
             self.lastEnduringEvent.SetShouldEnd()
-        
-        
+
+
     def GetValue(self, key, client = None):
         if key in self.pubVars:
             if client:
@@ -3808,7 +3813,7 @@ class Webserver(eg.PluginBase):
             if key not in self.pubVars or value != self.pubVars[key]:
                 self.pubVars[key] = unicode(value)
                 self.knowlClients[key] = []
-           
+
 
     def SetPersistentValue(self, key, value):
         if key not in self.pubVars:
@@ -3816,13 +3821,13 @@ class Webserver(eg.PluginBase):
                 self.pubPerVars[key] = unicode(value)
                 self.pubPerClients[key] = []
                 wx.CallAfter(self.SetDocIsDirty)
-           
+
 
     def SetClientsFlags(self, key):
         if key not in self.pubVars:
             self.pubVars[key] = "dummy"
         self.knowlClients[key] = []
-           
+
 
     def GetChangedValues(self, client):
         tmpDict = {}
@@ -3873,7 +3878,7 @@ class Webserver(eg.PluginBase):
                     )
                 else:
                     eg.PrintTraceback() # debugging ...
-                
+
 
     def StopPeriodicTasks(self, all, taskName = ""):
         for t in eg.scheduler.__dict__['heap']:
@@ -3896,7 +3901,7 @@ class Webserver(eg.PluginBase):
             try:
                 if len(t[2]) > 2 and t[2][0] == self and t[2][1] == client:
                     if taskName == "" or taskName ==  t[2][2]:
-                        eg.scheduler.CancelTask(t) 
+                        eg.scheduler.CancelTask(t)
             except:
                 pass
 
@@ -3910,19 +3915,19 @@ class Webserver(eg.PluginBase):
     ):
         sender = handler.clAddr[0]
         result = None
-        if methodName == "GetGlobalValue":   
+        if methodName == "GetGlobalValue":
             if len(args):
                 try:
                     result = unicode(handler.environment.globals[args[0]])
                 except:
                     pass
-        elif methodName == "GetValue":   
+        elif methodName == "GetValue":
             if len(args):
                 try:
                     result = self.GetValue(args[0], sender)
                 except:
                     pass
-        elif methodName == "GetPersistentValue":   
+        elif methodName == "GetPersistentValue":
             if len(args):
                 try:
                     result = self.GetPersistentValue(
@@ -3937,14 +3942,14 @@ class Webserver(eg.PluginBase):
                     self.SetValue(args[0], args[1])
                     result = True
                 except:
-                    result = False     
+                    result = False
         elif methodName == "SetPersistentValue":
             if len(args):
                 try:
                     self.SetPersistentValue(args[0], args[1])
                     result = True
                 except:
-                    result = False     
+                    result = False
         elif methodName == "GetAllValues":
             result = self.GetAllValues(sender)
         elif methodName == "GetChangedValues":
@@ -3988,19 +3993,19 @@ class Webserver(eg.PluginBase):
         kwargs,
     ):
         result = None
-        if methodName == "GetGlobalValue":   
+        if methodName == "GetGlobalValue":
             if len(args):
                 try:
                     result = unicode(eg.globals.__dict__[args[0]])
                 except:
                     pass
-        elif methodName == "GetValue":   
+        elif methodName == "GetValue":
             if len(args):
                 try:
                     result = self.GetValue(args[0])
                 except:
                     pass
-        elif methodName == "GetPersistentValue":   
+        elif methodName == "GetPersistentValue":
             if len(args):
                 try:
                     result = self.GetPersistentValue(args[0])
@@ -4012,14 +4017,14 @@ class Webserver(eg.PluginBase):
                     self.SetValue(args[0], args[1])
                     result = True
                 except:
-                    result = False     
+                    result = False
         elif methodName == "SetPersistentValue":
             if len(args):
                 try:
                     self.SetPersistentValue(args[0], args[1])
                     result = True
                 except:
-                    result = False     
+                    result = False
         elif methodName == "GetAllValues":
             result = self.GetAllValues()
         #elif methodName == "GetChangedValues":
@@ -4039,7 +4044,7 @@ class Webserver(eg.PluginBase):
             else:
                 self.TriggerEvent(*args, **kwargs)
         #elif methodName == "TriggerEnduringEvent":
-        #    self.EndLastEnduringEvent()  
+        #    self.EndLastEnduringEvent()
         #    if 'prefix' in kwargs:
         #        self.lastEnduringEvent=eg.TriggerEnduringEvent(*args, **kwargs)
         #    else:
@@ -4054,7 +4059,7 @@ class Webserver(eg.PluginBase):
         return result
 
 
-    def SetDocIsDirty(self):     
+    def SetDocIsDirty(self):
         eg.document.SetIsDirty()
         if self.autosave:
             eg.document.Save()
@@ -4065,7 +4070,7 @@ class Webserver(eg.PluginBase):
             strng = eg.ParseString(strng)
         except:
             if remBrac and strng.startswith("{") and strng.endswith("}"):
-                strng = strng[1:-1]        
+                strng = strng[1:-1]
         tv = self.tv
         pv = self.pv
         try:
@@ -4097,7 +4102,7 @@ class Webserver(eg.PluginBase):
                     eg.PrintTraceback() # debugging ...
         else:
             eg.PrintNotice(self.text.keyErr % repr(client))
-       
+
 
     def StartClient(
         self,
@@ -4144,7 +4149,7 @@ class Webserver(eg.PluginBase):
             pass
         try:
             data = loads(message)
-        except: 
+        except:
             self.TriggerEvent(
                 u"ServerMessage.%s" % message,
                 payload=(server.title, message)
@@ -4175,9 +4180,9 @@ class Webserver(eg.PluginBase):
                     eg.PrintTraceback()
             else:
                 self.TriggerEvent(
-                    methodName, 
+                    methodName,
                     payload = (server.title, data)
-                )  
+                )
 
 
     def ClientSendMessage(self, title, message):
@@ -4221,7 +4226,7 @@ class Webserver(eg.PluginBase):
         valueSplitter =";;",
         certfile = "",
         keyfile = "",
-        noAutWs = False                
+        noAutWs = False
     ):
         text = self.text
         panel = eg.ConfigPanel()
@@ -4312,7 +4317,7 @@ class Webserver(eg.PluginBase):
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
         staticBoxSizer.Add(sizer, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM, 5)
         panel.sizer.Add(staticBoxSizer, 0, wx.EXPAND|wx.TOP, 10)
-        
+
 #        def ConfigureTargets(event):
 #            dialog = ConfigureTargetsDialog(panel, [])
 #            dialog.ShowModal()
@@ -4360,7 +4365,7 @@ class Webserver(eg.PluginBase):
                 self.text.dialogTemp,
             )
             evt.Skip()
-        dialogButton2.Bind(wx.EVT_BUTTON, OnDialog2Btn)     
+        dialogButton2.Bind(wx.EVT_BUTTON, OnDialog2Btn)
 
 
         def OnDialog3Btn(evt):
@@ -4371,7 +4376,7 @@ class Webserver(eg.PluginBase):
             dlg.Centre()
             wx.CallAfter(dlg.ShowClientsDialog)
             evt.Skip()
-        dialogButton3.Bind(wx.EVT_BUTTON, OnDialog3Btn)     
+        dialogButton3.Bind(wx.EVT_BUTTON, OnDialog3Btn)
 
 
         def OnDialog4Btn(evt):
@@ -4382,7 +4387,7 @@ class Webserver(eg.PluginBase):
             dlg.Centre()
             wx.CallAfter(dlg.ShowServersDialog)
             evt.Skip()
-        dialogButton4.Bind(wx.EVT_BUTTON, OnDialog4Btn)     
+        dialogButton4.Bind(wx.EVT_BUTTON, OnDialog4Btn)
 
 
         while panel.Affirmed():
@@ -4528,7 +4533,7 @@ class StartClient(eg.ActionBase):
         panel.sizer.Add(urlSizer, 0, wx.EXPAND|wx.TOP,8)
         panel.sizer.Add(topSizer, 0, wx.EXPAND|wx.TOP,8)
         panel.sizer.Add(noCertCtrl, 0, wx.TOP,8)
-        
+
         def onTitleCtrl(evt):
             title = evt.GetString()
             actions = self.plugin.GetActions(StartClient.actionId, self)
@@ -4628,7 +4633,7 @@ class ClSendMessage(eg.ActionBase):
         messSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, self.text.mess),
             wx.VERTICAL
-        )        
+        )
         parsCtrl = wx.CheckBox(panel, -1, pext.parsing)
         parsCtrl.SetValue(pars)
         messSizer.Add(messCtrl, 0, wx.EXPAND)
@@ -4699,7 +4704,7 @@ class ClSendValue(eg.ActionBase):
         messSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, self.text.varnames),
             wx.VERTICAL
-        )        
+        )
         messSizer.Add(varnamesCtrl, 0, wx.EXPAND)
         panel.sizer.Add(topSizer, 0, wx.LEFT|wx.EXPAND)
         panel.sizer.Add(messSizer, 0, wx.EXPAND|wx.TOP, 8)
@@ -4763,8 +4768,8 @@ class ClSendData(eg.ActionBase):
         data2send="",
         cond="",
     ):
-        data = self.plugin.EvalString(data2send)    
-        cond = self.plugin.EvalString(cond) if cond != "" else True   
+        data = self.plugin.EvalString(data2send)
+        cond = self.plugin.EvalString(cond) if cond != "" else True
         if cond:
             self.plugin.ClientSendMessage(
                 eg.ParseString(title),
@@ -4773,7 +4778,7 @@ class ClSendData(eg.ActionBase):
                     'dataName':dataName,
                     'data':data
                 })
-            )        
+            )
 
 
     def GetLabel(self, title, dataName, data2send, cond):
@@ -4812,7 +4817,7 @@ class ClSendData(eg.ActionBase):
         mainSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, ""),
             wx.VERTICAL
-        )        
+        )
         mainSizer.Add(nameLabel)
         mainSizer.Add(nameCtrl,0,wx.EXPAND|wx.TOP,2)
         mainSizer.Add(sendLabel,0,wx.TOP,10)
@@ -4842,7 +4847,7 @@ class ClSendCommand(eg.ActionBase):
         kwArgs = "Keyw. arguments:"
         onlyChange = "Data send only if it has been changed"
         period = "Sending period [s]:"
-        
+
 
     def __call__(
         self,
@@ -4855,7 +4860,7 @@ class ClSendCommand(eg.ActionBase):
         othArgs="",
         kwArgs ="",
     ):
-        cmdName = self.plugin.EvalString(cmdName)    
+        cmdName = self.plugin.EvalString(cmdName)
         args = [self.plugin.EvalString(arg1)] if arg1 != "" else []
         if arg2 != "":
             args.append(self.plugin.EvalString(arg2))
@@ -4873,7 +4878,7 @@ class ClSendCommand(eg.ActionBase):
                 kwargs = dict(self.plugin.EvalString(kwArgs, False))
             except:
                 pass
-        cond = self.plugin.EvalString(cond) if cond != "" else True   
+        cond = self.plugin.EvalString(cond) if cond != "" else True
         if cond:
             self.plugin.ClientSendMessage(
                 eg.ParseString(title),
@@ -4966,10 +4971,10 @@ class ClSendCommand(eg.ActionBase):
         messSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, ""),
             wx.VERTICAL
-        )        
+        )
         messSizer.Add(mainSizer,0,wx.EXPAND)
         panel.sizer.Add(messSizer,0,wx.TOP|wx.BOTTOM|wx.EXPAND,5)
-       
+
         while panel.Affirmed():
             panel.SetResult(
                 titleCtrl.GetValue(),
@@ -4980,7 +4985,7 @@ class ClSendCommand(eg.ActionBase):
                 arg3Ctrl.GetValue(),
                 othCtrl.GetValue(),
                 kwCtrl.GetValue()
-            )       
+            )
 #===============================================================================
 
 class ClSendUniversal(eg.ActionBase):
@@ -4992,7 +4997,7 @@ class ClSendUniversal(eg.ActionBase):
         kwArgs = "Keyw. arguments:"
         onlyChange = "Data send only if it has been changed"
         period = "Sending period [s]:"
-        
+
 
     def __call__(
         self,
@@ -5015,7 +5020,7 @@ class ClSendUniversal(eg.ActionBase):
             except:
                 pass
 
-        cond = self.plugin.EvalString(cond) if cond != "" else True   
+        cond = self.plugin.EvalString(cond) if cond != "" else True
         if cond:
             self.plugin.ClientSendMessage(
                 eg.ParseString(title),
@@ -5025,7 +5030,7 @@ class ClSendUniversal(eg.ActionBase):
                         'args':args,
                         'kwargs':kwargs
                     }
-                ),                    
+                ),
             )
 
 
@@ -5090,10 +5095,10 @@ class ClSendUniversal(eg.ActionBase):
         messSizer = wx.StaticBoxSizer(
             wx.StaticBox(panel, -1, ""),
             wx.VERTICAL
-        )        
+        )
         messSizer.Add(mainSizer, 0, wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
         panel.sizer.Add(messSizer, 0, wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
-       
+
         while panel.Affirmed():
             panel.SetResult(
                 titleCtrl.GetValue(),
@@ -5101,7 +5106,7 @@ class ClSendUniversal(eg.ActionBase):
                 condCtrl.GetValue(),
                 othCtrl.GetValue(),
                 kwCtrl.GetValue()
-            )       
+            )
 #===============================================================================
 
 ACTIONS = (
@@ -5118,7 +5123,7 @@ ACTIONS = (
        None
     ),
     (eg.ActionGroup,
-        'VariableActions', 
+        'VariableActions',
         'Variable actions',
         'Variable actions', (
         (GetValue,
@@ -5166,7 +5171,7 @@ Following (optional) evaluation, message is sent as is (no JSON formatting).''',
         ),
         (WsBroadcastValue,
             'BroadcastValue',
-            'Broadcast values', 
+            'Broadcast values',
             '''Broadcasts a value(-s) of a variable(-s)
  (temporary or persistent) to all WebSocket clients.
 
@@ -5230,8 +5235,8 @@ This action allows you to specify a universal data packet.
 <br>A message is formatted as a JSON object.
 <br>A client receives a message in the following form:
 <br>{'method' :method, 'args':args, 'kwargs':kwargs},
-<br>where method is the selected method, 
-<br>args is argument from the line Arguments 
+<br>where method is the selected method,
+<br>args is argument from the line Arguments
 <br>and kwargs is argument from the line Keyw. arguments.
 <br>Note: args is a Python list, while kwargs is a Python dictionary.''',
             False
@@ -5247,7 +5252,7 @@ Following (optional) evaluation, message is sent as is (no JSON formatting).''',
         (WsSendValue,
             'SendValue',
             'Send values',
-            '''Sends a value(-s) of a variable(-s) (temporary or persistent) 
+            '''Sends a value(-s) of a variable(-s) (temporary or persistent)
 to one WebSocket client.
 
 Specify name of a variable or list of variables (separated by commas,
@@ -5310,8 +5315,8 @@ This action allows you to specify a universal data packet.
 <br>A message is formatted as a JSON object.
 <br>A client receives a message in the following form:
 <br>{'method' :method, 'args':args, 'kwargs':kwargs},
-<br>where method is the selected method, 
-<br>args is argument from the line Arguments 
+<br>where method is the selected method,
+<br>args is argument from the line Arguments
 <br>and kwargs is argument from the line Keyw. arguments.
 <br>Note: args is a Python list, while kwargs is a Python dictionary.''',
             False
@@ -5324,9 +5329,9 @@ This action allows you to specify a universal data packet.
                 'WsPeriodicallyBroadcastData',
                 'Periodically broadcast data',
                 '''Periodically broadcasts data to all WebSocket clients.
-                
+
 Same as "Broadcast data" action, but the broadcasting is automatically repeated
- periodically after a predetermined time.''', 
+ periodically after a predetermined time.''',
                 True
             ),
             (WsBroadcastCommand,
@@ -5351,7 +5356,7 @@ Same as "Broadcast universal packet" action, but the broadcasting is
                 'WsPeriodicallySendData',
                 'Periodically send data',
                 '''Periodically sends data to one WebSocket client.
-                
+
 Same as Send data action, but the sending is automatically repeated
  periodically after a predetermined time.''',
                 True
@@ -5409,7 +5414,7 @@ Following (optional) evaluation, message is sent as is (no JSON formatting).''',
         (ClSendValue,
             'ClSendValue',
             'Send values to server',
-            '''Sends a value(-s) of a variable(-s) (temporary or persistent) 
+            '''Sends a value(-s) of a variable(-s) (temporary or persistent)
 to WebSocket server.
 
 Specify name of a variable or list of variables (separated by commas,
@@ -5472,8 +5477,8 @@ This action allows you to specify a universal data packet.
 <br>A message is formatted as a JSON object.
 <br>A server receives a message in the following form:
 <br>{'method' :method, 'args':args, 'kwargs':kwargs},
-<br>where method is the selected method, 
-<br>args is argument from the line Arguments 
+<br>where method is the selected method,
+<br>args is argument from the line Arguments
 <br>and kwargs is argument from the line Keyw. arguments.
 <br>Note: args is a Python list, while kwargs is a Python dictionary.''',
             False
@@ -5481,3 +5486,4 @@ This action allows you to specify a universal data packet.
         )),
 
 )
+

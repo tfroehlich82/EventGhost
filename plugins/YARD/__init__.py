@@ -1,25 +1,30 @@
 # -*- coding: utf-8 -*-
 #
 # This file is a plugin for EventGhost.
-# Copyright (C) 2005-2010 Lars-Peter Voss <bitmonster@eventghost.org>
-#                         André Weber <WeberAndre@gmx.de>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
+#                       André Weber <WeberAndre@gmx.de>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import eg
 
 eg.RegisterPlugin(
     name = "Y.A.R.D.",
-    author = u"André Weber & Bitmonster",
+    author = (
+        u"André Weber",
+        "Bitmonster",
+    ),
     version = "1.1.0",
     kind = "remote",
     guid = "{1119068D-44AD-40E0-BDB6-B00D9F88F5A0}",
@@ -57,14 +62,14 @@ class EventHandler:
 
     def OngetName(self):
         return "EventGhost YARD Plugin"
-            
+
 
     def OnShutdown(self):
         eg.PrintNotice("Y.A.R.D.-Server shutdown")
         try:
            self.plugin.workerThread.comobj_yard.close()
         except:
-           raise eg.Exception("YARD server not found") 
+           raise eg.Exception("YARD server not found")
         del self.plugin.workerThread.comobj_yard
         del self.plugin.comObj
         self.plugin.workerThread.comobj_yard = None
@@ -180,7 +185,7 @@ class YARD(eg.PluginBase):
         # keytype
         #  0 = remote control
         #  1 = rotary encoder
-        #  2 = keypad from keylcd   
+        #  2 = keypad from keylcd
         # keyevent
         #  0 - a key (without up down detection)
         #  1 - key down event
@@ -194,35 +199,35 @@ class YARD(eg.PluginBase):
                 # 0 up down detection in yards disabled
                 if self.timer:
                     self.timer.cancel()
-                self.TriggerEnduringEvent(keymapped) 
+                self.TriggerEnduringEvent(keymapped)
                 self.timer = Timer(self.remote_control_timeout, self.OnTimeOut)
                 self.timer.start()
-            elif keyevent == 1:  
-                # Yard Received a new key down... 
-                self.TriggerEnduringEvent(keymapped)  
-            elif keyevent == 2:  
+            elif keyevent == 1:
+                # Yard Received a new key down...
+                self.TriggerEnduringEvent(keymapped)
+            elif keyevent == 2:
                 # Yard Received a repeated key...
-                if self.timer:   
+                if self.timer:
                     self.timer.cancel()
                 self.timer = Timer(self.remote_control_timeout, self.OnTimeOut)
                 self.timer.start()
             elif keyevent == 3:
-                # Yard detected a keyup... 
-                if self.timer:   
+                # Yard detected a keyup...
+                if self.timer:
                     self.timer.cancel()
-                    self.timer = None 
-                self.EndLastEvent()  
+                    self.timer = None
+                self.EndLastEvent()
         elif keytype == 1:
-            self.TriggerEvent(keymapped)   
+            self.TriggerEvent(keymapped)
         elif keytype == 2:
             # key pad keylcd
             if keyevent == 1:
-                self.TriggerEvent(keymapped+".down")  
+                self.TriggerEvent(keymapped+".down")
             elif keyevent == 2:
                 # +".repeat"
-                self.TriggerEvent(keymapped)   
+                self.TriggerEvent(keymapped)
             elif keyevent == 3:
-                self.TriggerEvent(keymapped+".up")   
+                self.TriggerEvent(keymapped+".up")
 
 
     def HandleEvent(self, eventString):
@@ -233,7 +238,7 @@ class YARD(eg.PluginBase):
                 i = int(eventString[10:12])
                 self.buttons[i] = True
                 buttons = [
-                    "Button%i" % i 
+                    "Button%i" % i
                     for i, btn in enumerate(self.buttons) if btn
                 ]
                 self.TriggerEvent("+".join(buttons))
@@ -243,14 +248,14 @@ class YARD(eg.PluginBase):
                 self.EndLastEvent()
             elif eventString == "070000001080FF":
                 buttons = [
-                    "Button%i" % i 
+                    "Button%i" % i
                     for i, btn in enumerate(self.buttons) if btn
                 ]
                 buttons.append("JogLeft")
                 self.TriggerEvent("+".join(buttons))
             elif eventString == "070000001081FF":
                 buttons = [
-                    "Button%i" % i 
+                    "Button%i" % i
                     for i, btn in enumerate(self.buttons) if btn
                 ]
                 buttons.append("JogRight")
@@ -264,7 +269,7 @@ class YARD(eg.PluginBase):
             if self.disableUnmapped:
                 return
             timeout = self.timeout
-        self.timer.cancel()       
+        self.timer.cancel()
         if self.lastEvent != eventString:
             self.TriggerEnduringEvent(eventString)
             self.lastEvent = eventString
@@ -274,8 +279,8 @@ class YARD(eg.PluginBase):
 
     def Map(self, what, to, timeout=None):
         self.mapTable[what] = (to, timeout or self.timeout)
-        
-        
+
+
     def StartYardServer(self):
         try:
             rkey = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Webers\\Y.A.R.D")
@@ -288,21 +293,21 @@ class YARD(eg.PluginBase):
             )
         try:
             hProcess = CreateProcess(
-                None, 
-                path, 
-                None, 
-                None, 
+                None,
+                path,
+                None,
+                None,
                 0,
-                CREATE_NEW_CONSOLE, 
-                None, 
-                None, 
+                CREATE_NEW_CONSOLE,
+                None,
+                None,
                 STARTUPINFO()
             )[0]
         except Exception, exc:
             raise eg.Exception(FormatError(exc[0]))
         WaitForInputIdle(hProcess, 10000)
-        
-        
+
+
 
 class SendRemoteKey(eg.ActionBase):
     name = "Sende IR"
@@ -313,7 +318,7 @@ class SendRemoteKey(eg.ActionBase):
     remoteName = None
     keyName = None
     numRepeats = None
-    
+
     def __call__(self, remoteName, keyName, numRepeats):
         if self.plugin.comObj is None:
             raise eg.Exception("YARD-Error: No connection")
@@ -321,24 +326,24 @@ class SendRemoteKey(eg.ActionBase):
             self.plugin.comObj.SendRemoteKey(remoteName, keyName, numRepeats)
         except com_error, err:
             raise eg.Exception("YARD-Error: " + err[1])
-            
-            
+
+
     def GetLabel(self, remoteName, keyName, numRepeats):
         return "YARD: Sende " + remoteName + ", " + keyName
 
 
     def Configure(self, remoteName=None, keyName=None, numRepeats=None):
         panel = eg.ConfigPanel()
-            
+
         remoteName = remoteName or self.remoteName or ""
         keyName = keyName or self.keyName or ""
         numRepeats = numRepeats or self.numRepeats or 1
-        
+
         mySizer = wx.FlexGridSizer(3, 2, 5, 5)
 
         st1 = wx.StaticText(panel, -1, "Fernbedienung")
         mySizer.Add(st1, 0, wx.ALIGN_CENTER_VERTICAL)
-        
+
         rchoices = []
         kchoices = []
         foundRemoteIndex = 0
@@ -360,10 +365,10 @@ class SendRemoteKey(eg.ActionBase):
 
         st2 = wx.StaticText(panel, -1, "Name der Taste")
         mySizer.Add(st2, 0, wx.ALIGN_CENTER_VERTICAL)
-        
+
         keyCtrl = wx.Choice(panel, -1, choices=kchoices)#, size=(150,-1))
         mySizer.Add(keyCtrl, 1, wx.EXPAND)
-        
+
         def UpdateKeys(event=None):
             foundKeyIndex = 0
             remoteIndex = remoteCtrl.GetSelection()
@@ -375,18 +380,18 @@ class SendRemoteKey(eg.ActionBase):
                 if key == keyName:
                     foundKeyIndex = i
             keyCtrl.Select(foundKeyIndex)
-                
+
         remoteCtrl.Bind(wx.EVT_CHOICE, UpdateKeys)
         remoteCtrl.Select(foundRemoteIndex)
         if comObj:
             UpdateKeys()
-        
+
         st3 = wx.StaticText(panel, -1, "Anzahl der Wiederholungen")
         mySizer.Add(st3, 0, wx.ALIGN_CENTER_VERTICAL)
-        
+
         numRepeatsCtrl = eg.SpinIntCtrl(panel, value=numRepeats,  min=1)
         mySizer.Add(numRepeatsCtrl)
-        
+
         panel.sizer.Add(mySizer, 1, wx.EXPAND)
 
         while panel.Affirmed():
@@ -394,11 +399,11 @@ class SendRemoteKey(eg.ActionBase):
             self.keyName = keyCtrl.GetStringSelection()
             self.numRepeats = numRepeatsCtrl.GetValue()
             panel.SetResult(self.remoteName, self.keyName, self.numRepeats)
-        
-        
-        
+
+
+
 class ClearScreen(eg.ActionBase):
-    
+
     def __call__(self):
         lcd = self.plugin.comObj.GetLcd(0)
         lcd.ClrScr()
@@ -406,7 +411,7 @@ class ClearScreen(eg.ActionBase):
 
 
 class Print(eg.ActionWithStringParameter):
-    
+
     def __call__(self, theString):
         lcd = self.plugin.comObj.GetLcd(0)
         lcd.Print(eg.ParseString(theString))

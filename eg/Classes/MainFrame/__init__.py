@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright (C) 2005-2009 Lars-Peter Voss <bitmonster@eventghost.org>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
 #
-# EventGhost is free software; you can redistribute it and/or modify it under
-# the terms of the GNU General Public License version 2 as published by the
-# Free Software Foundation;
+# EventGhost is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 2 of the License, or (at your option)
+# any later version.
 #
-# EventGhost is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# EventGhost is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+# more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along
+# with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import eg
 import wx
@@ -479,7 +481,7 @@ class MainFrame(wx.Frame):
 
 
     def CreateTreeCtrl(self):
-        treeCtrl = TreeCtrl(self, document=self.document)        
+        treeCtrl = TreeCtrl(self, document=self.document)
         self.auiManager.AddPane(
             treeCtrl,
             wx.aui.AuiPaneInfo().
@@ -490,11 +492,11 @@ class MainFrame(wx.Frame):
                 Dockable(True).
                 MaximizeButton(True).
                 Caption(" " + Text.Tree.caption).
-                CloseButton(False)      
+                CloseButton(False)
         )
         self.auiManager.Update()
         treeCtrl.SetFocus()
-        return treeCtrl          
+        return treeCtrl
 
 
     def CreateLogCtrl(self):
@@ -566,7 +568,7 @@ class MainFrame(wx.Frame):
         info = self.auiManager.SavePaneInfo(panel)
         pos = info.find(";dir=") + 5
         return info[pos]
-        
+
 
     def UpdateRatio(self):
         self.logCtrl.SetColumnWidth(
@@ -618,7 +620,7 @@ class MainFrame(wx.Frame):
                     l_val =self.logCtrl.GetSizeTuple()[coord]
                     t_val = self.treeCtrl.GetSizeTuple()[coord]
                     c_val = self.GetClientSizeTuple()[coord]
-                    k = c_val - l_val - t_val      
+                    k = c_val - l_val - t_val
                     l_val = int((c_val-k)/(1 + self.ratio))
                     #t_val = (c_val-k)-l_val
                     b1 = s.find("|dock_size(%s," % dir) + 1
