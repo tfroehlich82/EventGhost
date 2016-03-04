@@ -44,6 +44,7 @@ class Text(eg.TranslatableStrings):
     limitMemory1 = "Limit memory consumption while minimized to"
     limitMemory2 = "MB"
     confirmDelete = "Confirm delete of tree items"
+    refreshEnv = "Always refresh environment before launching programs"
 
 
 
@@ -140,6 +141,11 @@ class OptionsDialog(eg.TaskletDialog):
             text.confirmDelete
         )
 
+        refreshEnvCtrl = page1.CheckBox(
+            config.refreshEnv,
+            text.refreshEnv
+        )
+
         languageChoice = BitmapComboBox(page1, style=wx.CB_READONLY)
         for name, code in zip(languageNameList, languageList):
             filename = os.path.join(eg.imagesDir, "flags", "%s.png" % code)
@@ -174,6 +180,7 @@ class OptionsDialog(eg.TaskletDialog):
                 #(checkUpdateCtrl, 0, flags),
                 (memoryLimitSizer, 0, flags),
                 (confirmDeleteCtrl, 0, flags),
+                (refreshEnvCtrl, 0, flags),
             )
         )
 
@@ -201,26 +208,8 @@ class OptionsDialog(eg.TaskletDialog):
 
         oldLanguage = config.language
         while self.Affirmed():
-            tmp = startWithWindowsCtrl.GetValue()
-            if tmp != eg.config.startWithWindows:
-                config.startWithWindows = tmp
-                path = os.path.join(
-                    eg.folderPath.Startup,
-                    eg.APP_NAME + ".lnk"
-                )
-                if tmp:
-                    # create shortcut in autostart dir
-                    eg.Shortcut.Create(
-                        path=path,
-                        target=os.path.abspath(sys.executable),
-                        arguments="-h -e OnInitAfterBoot"
-                    )
-                else:
-                    # remove shortcut from autostart dir
-                    try:
-                        os.remove(path)
-                    except:
-                        pass
+            config.startWithWindows = startWithWindowsCtrl.GetValue()
+            eg.Utils.UpdateStartupShortcut(config.startWithWindows)
 
             config.hideOnClose = hideOnCloseCtrl.GetValue()
             config.useFixedFont = useFixedFontCtrl.GetValue()
@@ -229,6 +218,7 @@ class OptionsDialog(eg.TaskletDialog):
             config.limitMemory = bool(memoryLimitCtrl.GetValue())
             config.limitMemorySize = memoryLimitSpinCtrl.GetValue()
             config.confirmDelete = confirmDeleteCtrl.GetValue()
+            config.refreshEnv = refreshEnvCtrl.GetValue()
 
             config.language = languageList[languageChoice.GetSelection()]
             config.Save()
