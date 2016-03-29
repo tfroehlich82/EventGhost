@@ -1244,11 +1244,11 @@ def piltoimage(pil, hasAlpha):
     image = wx.EmptyImage(*pil.size)
     rgbPil = pil.convert('RGB')
     if hasAlpha:
-        image.SetData(rgbPil.tostring())
-        image.SetAlphaData(pil.convert("RGBA").tostring()[3::4])
+        image.SetData(rgbPil.tobytes())
+        image.SetAlphaData(pil.convert("RGBA").tobytes()[3::4])
     else:
         new_image = rgbPil
-        data = new_image.tostring()
+        data = new_image.tobytes()
         image.SetData(data)
     return image
 #===============================================================================
@@ -1511,7 +1511,7 @@ class ShowPictureFrame(wx.Frame):
             pil = pil.resize((w, h), Image.NEAREST)
 
         bitmap = wx.BitmapFromBuffer(
-            w, h, pil.convert('RGB').tostring()
+            w, h, pil.convert('RGB').tobytes()
         )
         self.staticBitmap.SetBitmap(bitmap)
         x = GetMonitorDimensions()[display][0] + (width_ - w) / 2
@@ -2139,9 +2139,9 @@ programmatically\nUse the action: Hide image"""
         box0 = wx.StaticBox(panel,-1,text.main)
         box1 = wx.StaticBox(panel,-1,text.other)
         inTopSizer = wx.FlexGridSizer(1, 2, 5, 5)
-        inTopSizer.AddGrowableCol(1)
         inTopSizer.Add(wx.StaticText(panel, -1, text.data),0,ACV)
         inTopSizer.Add(dataCtrl,0,wx.EXPAND)
+        inTopSizer.AddGrowableCol(1)
         topSizer = wx.StaticBoxSizer(box0, wx.VERTICAL)
         topSizer.Add(inTopSizer,0,wx.EXPAND)
 
