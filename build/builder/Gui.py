@@ -22,7 +22,7 @@ import threading
 import wx
 
 import builder
-from Utils import GetRevision
+from Utils import GetRevision, ParseVersion
 
 class MainDialog(wx.Dialog):
 
@@ -102,7 +102,7 @@ class MainDialog(wx.Dialog):
         sb = egSzr.GetStaticBox()
         lblVersion = wx.StaticText(sb, wx.ID_ANY, "Version to build:")
         self.versionStr = wx.TextCtrl(sb, wx.ID_ANY,
-                                      value=buildSetup.appVersion)
+                                      value=buildSetup.appVersionShort)
         refreshVersion = wx.BitmapButton(sb, wx.ID_ANY, wx.ArtProvider.
                                          GetBitmap(wx.ART_GO_DOWN))
         refreshVersion.SetToolTip(wx.ToolTip(
@@ -153,7 +153,9 @@ class MainDialog(wx.Dialog):
                 ctrl = self.ctrls[section]
                 task.activated = ctrl.GetValue()
                 ctrl.Enable(False)
-        self.buildSetup.appVersion = self.versionStr.GetValue()
+        self.buildSetup.appVersion, self.buildSetup.appVersionShort = (
+            ParseVersion(self.versionStr.GetValue())
+        )
         self.buildSetup.gitConfig.update({
             "user": user,
             "repo": repo,

@@ -173,7 +173,12 @@ def Prepare():
 
 class CreateHtmlDocs(builder.Task):
     description = "Build HTML docs"
-    activated = False
+
+    def Setup(self):
+        if self.buildSetup.showGui:
+            self.activated = False
+        else:
+            self.activated = bool(self.buildSetup.args.sync)
 
     def DoTask(self):
         Prepare()
@@ -182,6 +187,7 @@ class CreateHtmlDocs(builder.Task):
             "-a",
             "-b", "html",
             "-E",
+            "-N",
             "-P",
             "-D", "release=%s" % self.buildSetup.appVersion,
             "-d", join(self.buildSetup.tmpDir, ".doctree"),
@@ -195,11 +201,13 @@ class CreateChmDocs(builder.Task):
     description = "Build CHM docs"
 
     def Setup(self):
-        if os.path.exists(
-            join(self.buildSetup.sourceDir, "EventGhost.chm")
-        ):
-            self.activated = False
-
+        if self.buildSetup.showGui:
+            if os.path.exists(
+                join(self.buildSetup.sourceDir, "EventGhost.chm")
+            ):
+                self.activated = False
+        else:
+            self.activated = bool(self.buildSetup.args.package)
 
     def DoTask(self):
         tmpDir = join(self.buildSetup.tmpDir, "chm")
@@ -211,6 +219,7 @@ class CreateChmDocs(builder.Task):
             "-b", "htmlhelp",
             "-E",  # Don’t use a saved environment (the structure
                    # caching all cross-references),
+            "-N",  # Prevent colored output.
             "-P",  # (Useful for debugging only.) Run the Python debugger,
                     # pdb, if an unhandled exception occurs while building.
             "-D", "release=%s" % self.buildSetup.appVersion,

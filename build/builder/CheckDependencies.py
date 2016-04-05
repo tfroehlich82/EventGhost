@@ -419,6 +419,8 @@ def CreateVirtualEnv():
 
     # Create virtualenv on top of Stackless Python.
     result = (StartProcess(
+        sys.executable,
+        "-m",
         "virtualenv",
         "--python=%s" % join(VirtualEnv.PATH, "python.exe"),
         VirtualEnv.PATH,
@@ -428,6 +430,10 @@ def CreateVirtualEnv():
     for f in backups:
         os.unlink(f)
         os.rename(f + ".bak", f)
+
+    # Start in build folder when virtualenv activated manually.
+    with open(join(VirtualEnv.PATH, ".project"), "w") as f:
+        f.write(os.getcwd())
 
     return result
 
@@ -497,7 +503,7 @@ def Pip(*args):
         args += ["-y"]
 
     try:
-        return (StartProcess("pip", *args) == 0)
+        return (StartProcess(sys.executable, "-m", "pip", *args) == 0)
     except WindowsError:
         raise MissingPip
 
