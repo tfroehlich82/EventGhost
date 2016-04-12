@@ -2,12 +2,11 @@
 /*.chm
 /*.dll
 /*.exe
-/build/builder/Data/Build.ini
-/build/builder/Data/Python??/[Ii]mports.py
-/build/docs/pluginlist.rst
-/build/docs/eg/*
-!/build/docs/eg/index.rst
-/build/output/
+/_build/data/docs/pluginlist.rst
+/_build/data/docs/eg/*
+!/_build/data/docs/eg/index.rst
+/_build/data/Python??/[Ii]mports.py
+/_build/output/
 /eg/StaticImports.py
 /lib??/*
 !/lib??/site-packages/

@@ -19,21 +19,16 @@
 """
 This script creates the EventGhost setup installer.
 """
-import sys
-import os
-from os.path import abspath, dirname, exists, join
+from os.path import dirname, join
 from glob import glob
-from inspect import stack
 
 # local imports
 import builder
-from builder.Logging import LogToFile
 from builder.Utils import ListDir
 
 
 EXCLUDE_DIRS = [
-    # Files and folders beginning with "." are excluded automatically.
-    "build",
+    # Files and folders beginning with "." and "_" are excluded automatically.
 ]
 
 INCLUDE_FILES = [
@@ -127,7 +122,7 @@ class MyBuilder(builder.Builder):
         srcDir = self.sourceDir
         files = set(ListDir(srcDir, EXCLUDE_DIRS, fullpath=False))
 
-        noincludes = ["."]
+        noincludes = [".", "_"]
         coreplugins = []
         for f in files.copy():
             if f.endswith("noinclude"):
@@ -184,7 +179,7 @@ class MyBuilder(builder.Builder):
             destName="pyw.exe"
         )
         inno.AddFile(
-            join(self.tmpDir, "VersionRevision.py"),
+            join(self.tmpDir, "VersionInfo.py"),
             destDir="eg\\Classes"
         )
         # create entries in the [InstallDelete] section of the Inno script to
@@ -201,24 +196,6 @@ class MyBuilder(builder.Builder):
         )
         inno.ExecuteInnoSetup()
 
-
-
-# Always execute build from build folder.
-os.chdir(dirname(abspath(stack()[0][1])))
-
-# Create output folder.
-if not exists("output"):
-    os.mkdir("output")
-
-# Initialize logging.
-LogToFile(join("output", "Build.log"))
-
-# Search virtualenv for modules last so stock distutils is used.
-if hasattr(sys, "real_prefix"):
-    for path in sys.path[:]:
-        if path.startswith(sys.prefix):
-            sys.path.remove(path)
-            sys.path.append(path)
 
 MyBuilder().Start()
 
