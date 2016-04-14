@@ -26,9 +26,7 @@ from os.path import abspath, dirname, exists, join
 import builder
 from builder import VirtualEnv
 from builder.Logging import LogToFile
-from builder.Utils import (
-    DecodePath, GetVersion, GetGitHubConfig, ParseVersion,
-)
+from builder.Utils import GetVersion, GetGitHubConfig
 
 
 class Task(object):
@@ -116,6 +114,7 @@ class Builder(object):
 
         self.appVersion = None
         self.appVersionShort = None
+        self.appVersionInfo = None
         self.tmpDir = tempfile.mkdtemp()
         self.appName = self.name
 
