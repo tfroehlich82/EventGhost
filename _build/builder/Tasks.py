@@ -19,33 +19,11 @@
 import shutil
 import time
 from os.path import join
+
+# Local imports
 import builder
 
-
-class UpdateVersionFile(builder.Task):
-    """
-    Write version information to eg/Classes/VersionInfo.py
-    """
-    description = "Update version file"
-    enabled = False
-
-    def DoTask(self):
-        buildSetup = self.buildSetup
-        buildSetup.buildTime = time.time()
-        filename = join(buildSetup.tmpDir, "VersionInfo.py")
-        outfile = open(filename, "wt")
-        major, minor, patch, alpha, beta = buildSetup.appVersionInfo
-        outfile.write("string = '{0}'\n".format(buildSetup.appVersion))
-        outfile.write("major = {0}\n".format(major))
-        outfile.write("minor = {0}\n".format(minor))
-        outfile.write("patch = {0}\n".format(patch))
-        outfile.write("alpha = {0}\n".format(alpha))
-        outfile.write("beta = {0}\n".format(beta))
-        outfile.write("buildTime = {0}\n".format(buildSetup.buildTime))
-        outfile.close()
-
-
-class CreateInstaller(builder.Task):
+class BuildInstaller(builder.Task):
     description = "Build Setup.exe"
 
     def Setup(self):
@@ -53,10 +31,36 @@ class CreateInstaller(builder.Task):
             self.activated = bool(self.buildSetup.args.package)
 
     def DoTask(self):
-        self.buildSetup.CreateInstaller()
+        self.buildSetup.BuildInstaller()
 
 
-class Upload(builder.Task):
+class BuildVersionFile(builder.Task):
+    """
+    Write version information to eg/Classes/VersionInfo.py
+    """
+    description = "Build version file"
+    enabled = False
+
+    def DoTask(self):
+        buildSetup = self.buildSetup
+        buildSetup.buildTime = time.time()
+        filename = join(buildSetup.tmpDir, "VersionInfo.py")
+        outfile = open(filename, "wt")
+        base = buildSetup.appVersion.split("-")[0]
+        major, minor, patch, alpha, beta, rc = buildSetup.appVersionInfo
+        outfile.write("string = '{0}'\n".format(buildSetup.appVersion))
+        outfile.write("base = '{0}'\n".format(base))
+        outfile.write("major = {0}\n".format(major))
+        outfile.write("minor = {0}\n".format(minor))
+        outfile.write("patch = {0}\n".format(patch))
+        outfile.write("alpha = {0}\n".format(alpha))
+        outfile.write("beta = {0}\n".format(beta))
+        outfile.write("rc = {0}\n".format(rc))
+        outfile.write("buildTime = {0}\n".format(buildSetup.buildTime))
+        outfile.close()
+
+
+class ReleaseToWeb(builder.Task):
     description = "Release to web"
     options = {"url": ""}
 
@@ -80,7 +84,7 @@ class Upload(builder.Task):
         shutil.copystat(src, dst)
 
 
-class SyncWebsite(builder.Task):
+class SynchronizeWebsite(builder.Task):
     description = "Synchronize website"
     options = {"url": ""}
 
@@ -110,34 +114,32 @@ class SyncWebsite(builder.Task):
         syncer.Close()
 
 
-
-from builder.CreateStaticImports import CreateStaticImports
-from builder.CreateImports import CreateImports
-from builder.CheckSources import CheckSources
-from builder.CreatePyExe import CreatePyExe
-from builder.CreateLibrary import CreateLibrary
-from builder.CreateWebsite import CreateWebsite
-from builder.CreateDocs import CreateHtmlDocs, CreateChmDocs
-from builder.CreateGitHubRelease import CreateGitHubRelease
-from builder.UpdateChangeLog import UpdateChangeLog
+from builder.CheckSourceCode import CheckSourceCode  # NOQA
+from builder.BuildStaticImports import BuildStaticImports  # NOQA
+from builder.BuildImports import BuildImports  # NOQA
+from builder.BuildInterpreters import BuildInterpreters  # NOQA
+from builder.BuildLibrary import BuildLibrary  # NOQA
+from builder.BuildDocs import BuildChmDocs, BuildHtmlDocs  # NOQA
+from builder.ReleaseToGitHub import ReleaseToGitHub  # NOQA
+from builder.BuildWebsite import BuildWebsite  # NOQA
+from builder.BuildChangelog import BuildChangelog  # NOQA
 
 TASKS = [
-    UpdateVersionFile,
-    CheckSources,
-    CreateStaticImports,
-    CreateImports,
-    CreatePyExe,
-    CreateLibrary,
-    UpdateChangeLog,
-    CreateChmDocs,
-    CreateInstaller,
-    CreateGitHubRelease,
-    Upload,
-    CreateWebsite,
-    CreateHtmlDocs,
-    SyncWebsite,
+    BuildVersionFile,
+    CheckSourceCode,
+    BuildStaticImports,
+    BuildImports,
+    BuildInterpreters,
+    BuildLibrary,
+    BuildChangelog,
+    BuildChmDocs,
+    BuildInstaller,
+    ReleaseToGitHub,
+    ReleaseToWeb,
+    BuildWebsite,
+    BuildHtmlDocs,
+    SynchronizeWebsite,
 ]
-
 
 def Main(buildSetup):
     """
@@ -148,4 +150,3 @@ def Main(buildSetup):
             print "---", task.description
             task.DoTask()
     print "--- All done!"
-

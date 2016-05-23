@@ -17,8 +17,10 @@
 # with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from os.path import join
 from glob import glob
+from os.path import join
+
+# Local imports
 import builder
 
 SINGLETONS = (
@@ -45,8 +47,8 @@ HEADER = '''\
 # with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 """
-This file was automatically created by the StaticImports.py script. Don't
-try to edit this file yourself.
+This file was automatically created by the BuildStaticImports.py script.
+Don't try to edit this file yourself.
 
 This module is not directly used by EventGhost. It only exists to help
 pylint and other tools to read the sources properly, as EventGhost is using
@@ -63,27 +65,7 @@ def RegisterPlugin(**dummyKwArgs):
     pass
 """
 
-def ScanDir(srcDir, outfile, modName):
-    parts = modName.split(".")
-    scanDir = join(srcDir, *parts)
-    if len(parts) > 1:
-        outfile.write("from %s import %s\n" % (modName, parts[-1]))
-    files = glob(join(scanDir, "*.py"))
-    for filename in files:
-        name = os.path.splitext(os.path.basename(filename))[0]
-        if not name.startswith("__"):
-            if len(parts) > 1:
-                outfile.write(
-                    "from %s.%s import %s as _tmp\n" % (modName, name, name)
-                )
-                outfile.write("%s.%s = _tmp\n" % (parts[-1], name))
-            else:
-                outfile.write("from %s.%s import %s\n" %(modName, name, name))
-                outfile.write("eg.%s = %s\n" %(name, name))
-
-
-
-class CreateStaticImports(builder.Task):
+class BuildStaticImports(builder.Task):
     description = "Build StaticImports.py"
 
     def Setup(self):
@@ -112,3 +94,21 @@ class CreateStaticImports(builder.Task):
         outfile.write(FOOTER)
         outfile.close()
 
+
+def ScanDir(srcDir, outfile, modName):
+    parts = modName.split(".")
+    scanDir = join(srcDir, *parts)
+    if len(parts) > 1:
+        outfile.write("from %s import %s\n" % (modName, parts[-1]))
+    files = glob(join(scanDir, "*.py"))
+    for filename in files:
+        name = os.path.splitext(os.path.basename(filename))[0]
+        if not name.startswith("__"):
+            if len(parts) > 1:
+                outfile.write(
+                    "from %s.%s import %s as _tmp\n" % (modName, name, name)
+                )
+                outfile.write("%s.%s = _tmp\n" % (parts[-1], name))
+            else:
+                outfile.write("from %s.%s import %s\n" % (modName, name, name))
+                outfile.write("eg.%s = %s\n" % (name, name))

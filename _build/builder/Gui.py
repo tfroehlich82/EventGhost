@@ -16,16 +16,15 @@
 # You should have received a copy of the GNU General Public License along
 # with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
-
 import sys
 import threading
 import wx
 
+# Local imports
 import builder
-from Utils import GetVersion, ParseVersion
+from builder.Utils import GetVersion, ParseVersion
 
 class MainDialog(wx.Dialog):
-
     def __init__(self, buildSetup):
         self.buildSetup = buildSetup
         wx.Dialog.__init__(
@@ -40,11 +39,17 @@ class MainDialog(wx.Dialog):
                 continue
             section = task.GetId()
             ctrl = wx.CheckBox(self, -1, task.description)
+            if section.endswith(".BuildInstaller"):
+                checked = task.activated
+                ctrl.Bind(wx.EVT_CHECKBOX, self.OnInstallerCheck)
             ctrl.SetValue(task.activated)
             ctrlsSizer.Add(ctrl, 0, wx.ALL, 5)
             self.ctrls[section] = ctrl
             if not task.enabled:
                 ctrl.Enable(False)
+
+        if checked:
+            self.OnInstallerCheck(True)
 
         self.okButton = wx.Button(self, wx.ID_OK)
         self.okButton.Bind(wx.EVT_BUTTON, self.OnOk)
@@ -101,17 +106,18 @@ class MainDialog(wx.Dialog):
 
         sb = egSzr.GetStaticBox()
         lblVersion = wx.StaticText(sb, wx.ID_ANY, "Version to build:")
-        self.versionStr = wx.TextCtrl(sb, wx.ID_ANY,
-                                      value=buildSetup.appVersionShort)
+        self.versionStr = wx.TextCtrl(sb, wx.ID_ANY)
+        self.UpdateVersion()
+
         refreshVersion = wx.BitmapButton(sb, wx.ID_ANY, wx.ArtProvider.
                                          GetBitmap(wx.ART_GO_DOWN))
         refreshVersion.SetToolTip(wx.ToolTip(
             'Get Version from GitHub. Before using,\n'
             'please fill the github section above.'))
-        refreshVersion.Bind(wx.EVT_BUTTON, self.RefreshVersion)
+        refreshVersion.Bind(wx.EVT_BUTTON, self.OnRefreshVersion)
 
         egSzr.Add(lblVersion, 0, wx.ALIGN_CENTER_VERTICAL |
-                  wx.LEFT | wx.RIGHT, 5 )
+                  wx.LEFT | wx.RIGHT, 5)
         egSzr.Add(self.versionStr, 0, wx.ALIGN_CENTER_VERTICAL |
                   wx.LEFT | wx.RIGHT, 5)
         egSzr.Add(refreshVersion, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
@@ -124,26 +130,60 @@ class MainDialog(wx.Dialog):
         mainSizer.Add(ghSzr, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
         mainSizer.Add(egSzr, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
         mainSizer.Add(sizer2, 1, wx.ALL | wx.EXPAND, 10)
-        mainSizer.Add(btnSizer, 0, wx.ALL|wx.ALIGN_RIGHT, 10)
+        mainSizer.Add(btnSizer, 0, wx.ALL | wx.ALIGN_RIGHT, 10)
         self.SetSizerAndFit(mainSizer)
         self.Center()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
+    def DoMain(self):
+        builder.Tasks.Main(self.buildSetup)
+        wx.CallAfter(self.OnExit)
+
+    def OnCancel(self, event):
+        event.Skip()
+        self.Destroy()
+        wx.GetApp().ExitMainLoop()
+
+    def OnClose(self, event):
+        event.Skip()
+        self.Destroy()
+        wx.GetApp().ExitMainLoop()
+
+    def OnExit(self):
+        self.Destroy()
+        sys.exit(0)
+
+    def OnInstallerCheck(self, event):
+        # We don't want releases going out without a current changelog (which
+        # is also included in the documentation), so let's force both to be
+        # built when building the installer.
+        for ctrl in (
+            self.ctrls["builder.BuildChangelog.BuildChangelog"],
+            self.ctrls["builder.BuildDocs.BuildChmDocs"],
+        ):
+            if event is True or event.Checked():
+                ctrl.Enable(False)
+                ctrl.SetValue(True)
+            else:
+                ctrl.Enable(True)
 
     def OnOk(self, dummyEvent):
-        """ Handles a click on the Ok button. """
         repository = self.chcRepo.GetStringSelection()
         try:
             user, repo = repository.split('/')
         except ValueError:
-            dlg = wx.MessageDialog(self, caption="Information", style=wx.OK,
-                            message="Repositoryname not valid. Must be:\n"
-                            "<user or organization>/<repository>.")
-            rc = dlg.ShowModal()
+            dlg = wx.MessageDialog(
+                self,
+                caption="Information",
+                style=wx.OK,
+                message="Repositoryname not valid. Must be:\n"
+                "<user or organization>/<repository>."
+            )
+            dlg.ShowModal()
             return
 
-        self.okButton.Enable(False)
-        self.cancelButton.Enable(False)
+        for child in self.GetChildren():
+            child.Enable(False)
         #self.SetWindowStyleFlag(wx.CAPTION|wx.RESIZE_BORDER)
         for task in self.buildSetup.tasks:
             if not task.visible:
@@ -152,10 +192,8 @@ class MainDialog(wx.Dialog):
             if section in self.ctrls:
                 ctrl = self.ctrls[section]
                 task.activated = ctrl.GetValue()
-                ctrl.Enable(False)
         (
             self.buildSetup.appVersion,
-            self.buildSetup.appVersionShort,
             self.buildSetup.appVersionInfo
         ) = (
             ParseVersion(self.versionStr.GetValue())
@@ -164,40 +202,14 @@ class MainDialog(wx.Dialog):
             "user": user,
             "repo": repo,
             "branch": self.chcBranch.GetStringSelection(),
-            })
+        })
         self.buildSetup.config.SaveSettings()
         thread = threading.Thread(target=self.DoMain)
         thread.start()
 
-
-    def DoMain(self):
-        builder.Tasks.Main(self.buildSetup)
-        wx.CallAfter(self.OnExit)
-
-
-    def OnExit(self):
-        self.Destroy()
-        sys.exit(0)
-
-
-    def OnCancel(self, event):
-        """ Handles a click on the cancel button. """
-        event.Skip()
-        self.Destroy()
-        wx.GetApp().ExitMainLoop()
-
-
-    def OnClose(self, event):
-        """ Handles a click on the close box of the frame. """
-        event.Skip()
-        self.Destroy()
-        wx.GetApp().ExitMainLoop()
-
-
-    def RefreshVersion(self, event):
+    def OnRefreshVersion(self, event):
         GetVersion(self.buildSetup)
-        self.versionStr.SetValue(self.buildSetup.appVersion)
-
+        self.UpdateVersion()
 
     def OnRepoSelection(self, event):
         key = self.chcRepo.GetStringSelection()
@@ -208,10 +220,14 @@ class MainDialog(wx.Dialog):
             self.buildSetup.gitConfig["all_repos"][key]["def_branch"]
         )
 
+    def UpdateVersion(self):
+        if not self.buildSetup.appVersion.startswith("WIP-"):
+            self.versionStr.SetValue(self.buildSetup.appVersion)
+
+
 def Main(buildSetup):
     app = wx.App(0)
     app.SetExitOnFrameDelete(True)
     mainDialog = MainDialog(buildSetup)
     mainDialog.Show()
     app.MainLoop()
-
