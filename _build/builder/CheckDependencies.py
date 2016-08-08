@@ -21,11 +21,11 @@ import os
 import pip
 import platform
 import re
-import shutil
 import sys
 import warnings
 from os.path import basename, exists, expandvars, join
 from pip._vendor import requests
+from shutil import copy2
 from string import digits
 
 # Local imports
@@ -98,8 +98,7 @@ class DllDependency(DependencyBase):
                     raise WrongVersion
                 else:
                     dest = join(self.buildSetup.sourceDir, basename(file))
-                    shutil.copyfile(file, dest)
-                    shutil.copystat(file, dest)
+                    copy2(file, dest)
         else:
             raise MissingDependency
 
@@ -399,7 +398,7 @@ def CreateVirtualEnv():
 
     # Install virtualenv and virtualenvwrapper.
     #Pip("install", "pip", "-q")
-    Pip("install", "virtualenv==15.0.1", "virtualenvwrapper-win", "-q")
+    Pip("install", "virtualenvwrapper-win", "-q")
 
     # Install Stackless Python in virtualenv folder.
     url = [d.url for d in DEPENDENCIES if d.name == "Stackless Python"][0]
@@ -409,7 +408,7 @@ def CreateVirtualEnv():
 
     # Backup stock files.
     for f in backups:
-        shutil.copy(f, f + ".bak")
+        copy2(f, f + ".bak")
 
     # Create virtualenv on top of Stackless Python.
     result = (StartProcess(

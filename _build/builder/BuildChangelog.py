@@ -16,15 +16,16 @@
 # You should have received a copy of the GNU General Public License along
 # with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
-import time
+import os
 from agithub.GitHub import GitHub
 from collections import OrderedDict
 from os.path import join
+from shutil import copy2
+from time import localtime, strftime
 
 # Local imports
 import builder
 from builder.Utils import EscapeMarkdown, NextPage
-from eg import systemEncoding
 
 class BuildChangelog(builder.Task):
     """
@@ -33,12 +34,18 @@ class BuildChangelog(builder.Task):
     description = "Build changelog"
 
     def Setup(self):
-        if not self.buildSetup.showGui:
+        if os.environ.get("USERNAME") == "appveyor":
+            self.activated = False
+        elif not self.buildSetup.showGui:
             self.activated = bool(self.buildSetup.args.package)
 
     def DoTask(self):
         buildSetup = self.buildSetup
-        changelog_path = join(buildSetup.sourceDir, "CHANGELOG.TXT")
+        changelog_path = join(buildSetup.outputDir, "CHANGELOG.TXT")
+        copy2(
+            join(buildSetup.sourceDir, "CHANGELOG.TXT"),
+            changelog_path
+        )
 
         token = buildSetup.gitConfig["token"]
         user = buildSetup.gitConfig["user"]
@@ -49,7 +56,7 @@ class BuildChangelog(builder.Task):
         rc, data = gh.repos[user][repo].git.refs.tags.get()
         if rc != 200:
             print "INFO: couldn't get tags."
-            return
+            exit(1)
         to_commits = [i["object"]["sha"] for i in data]
 
         # get commits since last release
@@ -64,7 +71,7 @@ class BuildChangelog(builder.Task):
             )
             if rc != 200:
                 print "INFO: couldn't get commits."
-                return
+                exit(1)
             for item in data:
                 if item['sha'] in to_commits:
                     break
@@ -94,17 +101,17 @@ class BuildChangelog(builder.Task):
             )
             if rc != 200:
                 print "INFO: couldn't get additional info."
-                return
+                exit(1)
             elif data.get("incomplete_results") == True:
                 print "INFO: incomplete search result."
-                return
+                exit(1)
             pulls.extend(data["items"])
             page = NextPage(gh)
 
-        title_notice = "Important changes for plugin developers:"
-        title_enhancement = "Features added:"
-        title_bug = "Bugs fixed:"
-        title_other = "Other changes:"
+        title_notice = "Important changes for plugin developers"
+        title_enhancement = "Enhancements"
+        title_bug = "Fixed bugs"
+        title_other = "Other changes"
         prs = OrderedDict()
         prs[title_notice] = []
         prs[title_enhancement] = []
@@ -128,41 +135,48 @@ class BuildChangelog(builder.Task):
                 prs[title_other].append(pr)
 
         # prepare the grouped output
+        buildDate = strftime("%Y-%m-%d", localtime(buildSetup.buildTime))
+        releaseUrl = "https://github.com/{0}/{1}/releases/tag/v{2}".format(
+            user, repo, buildSetup.appVersion
+        )
 
-        buildTime = time.strftime(
-            "%Y-%m-%d", time.gmtime(buildSetup.buildTime)
-        ).decode(systemEncoding)
-
-        new_logs = ["# [{0}]({1}) ({2})\n".format(
+        changes = ["## [{0}]({1}) ({2})\n".format(
             buildSetup.appVersion,
-            "https://github.com/{0}/{1}/releases/tag/v{2}".format(
-                user, repo, buildSetup.appVersion),
-            buildTime
+            releaseUrl,
+            buildDate,
         )]
-        print new_logs[0]
+        print "## {0} ({1})\n".format(buildSetup.appVersion, buildDate)
         for title, items in prs.iteritems():
             if items:
-                print "**{0}**\n".format(title)
-                new_logs.append("\n**{0}**\n\n".format(title))
+                changes.append("\n**{0}:**\n\n".format(title))
+                print "{0}:".format(title)
                 for pr in items:
-                    txt = "  - {0} [#{1}]({2}) ([{3}]({4}))".format(
+                    changes.append("* {0} [#{1}]({2}) ([{3}]({4}))\n".format(
                         EscapeMarkdown(pr["title"]),
                         pr["number"],
                         pr["html_url"],
                         pr["user"]["login"],
-                        pr["user"]["html_url"]
+                        pr["user"]["html_url"],
+                    ))
+                    print "* {0} #{1} ({2})".format(
+                        pr["title"],
+                        pr["number"],
+                        pr["user"]["login"],
                     )
-                    print txt
-                    new_logs.append(txt + "\n")
                 print ""
+
+        if len(changes) == 1:
+            text = "\nOnly minor changes in this release.\n"
+            changes.append(text)
+            print text
 
         # read the existing changelog...
         try:
             infile = open(changelog_path, "r")
         except IOError:
-            old_changelog = ''
+            old_changes = ''
         else:
-            old_changelog = infile.read()
+            old_changes = infile.read()
             infile.close()
 
         # ... and put the new changelog on top
@@ -180,8 +194,8 @@ class BuildChangelog(builder.Task):
                                    style=wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
         else:
-            outfile.writelines(new_logs)
-            if old_changelog:
-                outfile.write('\n\n')
-                outfile.write(old_changelog)
+            outfile.writelines(changes)
+            if old_changes:
+                outfile.write('\n---\n\n')
+                outfile.write(old_changes)
             outfile.close()
