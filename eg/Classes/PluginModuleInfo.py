@@ -31,10 +31,10 @@ class PluginModuleInfo(object):
     eg.RegisterPlugin call inside the plugin module. So it imports the main
     module, but stops the import immediately after the eg.RegisterPlugin call.
     """
-    name = u"unknown"
+    name = u"Unknown Plugin"
     description = u""
-    author = u"unknown author"
-    version = u"unknown version"
+    author = u"[unknown author]"
+    version = u"[unknown version]"
     kind = u"other"
     guid = ""
     canMultiLoad = False
@@ -46,10 +46,11 @@ class PluginModuleInfo(object):
     path = None
     pluginName = None
     hardwareId = ""
+    valid = False
 
     def __init__(self, path):
-        self.path = path
-        self.pluginName = os.path.basename(path)
+        self.description = self.path = path
+        self.name = self.pluginName = os.path.basename(path)
         originalRegisterPlugin = eg.RegisterPlugin
         eg.RegisterPlugin = self.RegisterPlugin
         sys.path.insert(0, self.path)
@@ -65,9 +66,10 @@ class PluginModuleInfo(object):
             # It is expected that the loading will raise
             # RegisterPluginException because eg.RegisterPlugin() is called
             # inside the module
-            pass
+            self.valid = True
         except:
-            eg.PrintTraceback(eg.text.Error.pluginLoadError % self.path)
+            if eg.debugLevel:
+                eg.PrintTraceback(eg.text.Error.pluginLoadError % self.path)
         finally:
             del sys.path[0]
             eg.RegisterPlugin = originalRegisterPlugin
@@ -85,8 +87,8 @@ class PluginModuleInfo(object):
         name = None,
         description = None,
         kind = "other",
-        author = "unknown author",
-        version = "unknown version",
+        author = "[unknown author]",
+        version = "[unknown version]",
         icon = None,
         canMultiLoad = False,
         createMacrosOnAdd = False,

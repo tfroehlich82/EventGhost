@@ -43,6 +43,7 @@ class App(wx.App):
     def __init__(self):
         self.onExitFuncs = []
         wx.App.__init__(self, 0)
+        self.locale = wx.Locale(wx.Locale.GetSystemLanguage())
         self.shouldVeto = False
         self.firstQuery = True
         self.endSession = False
@@ -58,10 +59,12 @@ class App(wx.App):
         eg.document.Close()
         eg.taskBarIcon.Close()
         if not eg.startupArguments.translate:
-            eg.PrintDebugNotice("Triggering OnClose")
-            egEvent = eg.eventThread.TriggerEvent("OnClose")
-            while not egEvent.isEnded:
-                self.Yield()
+            def DoOnClose():
+                eg.PrintDebugNotice("Triggering OnClose")
+                egEvent = eg.eventThread.TriggerEvent("OnClose")
+                while not egEvent.isEnded:
+                    self.Yield()
+            wx.CallAfter(DoOnClose)
         self.ExitMainLoop()
         return True
 

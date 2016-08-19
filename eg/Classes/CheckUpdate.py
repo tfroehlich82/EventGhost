@@ -17,21 +17,20 @@
 # with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
 import threading
-import time
 import webbrowser
 import wx
 from agithub.GitHub import GitHub
+from pkg_resources import parse_version
 
 # Local imports
 import eg
 
 class Text(eg.TranslatableStrings):
     newVersionMesg = \
-        "A newer version of EventGhost has been released.\n\n"\
-        "\tYour version:\t%s\n"\
-        "\tNewest version:\t%s\n\n"\
+        "A new version of EventGhost has been released!\n\n"\
+        "Your version:\t%s\n"\
+        "Newest version:\t%s\n\n"\
         "Do you want to visit the download page now?"
-    downloadButton = "Visit download page"
     waitMesg = "Please wait while EventGhost retrieves update information."
     ManOkMesg = "There is currently no newer version of EventGhost available."
     ManErrorMesg = \
@@ -65,7 +64,7 @@ class MessageDialog(eg.Dialog):
         staticText = self.StaticText(
             Text.newVersionMesg % (eg.Version.string, version)
         )
-        downloadButton = wx.Button(self, -1, Text.downloadButton)
+        downloadButton = wx.Button(self, -1, eg.text.General.ok)
         downloadButton.Bind(wx.EVT_BUTTON, self.OnOk)
         cancelButton = wx.Button(self, -1, eg.text.General.cancel)
         cancelButton.Bind(wx.EVT_BUTTON, self.OnCancel)
@@ -152,11 +151,16 @@ def _checkUpdate(manually=False):
             dialog.Destroy()
             dialog = None
 
-        time_release = time.strptime(
-            rel["created_at"], "%Y-%m-%dT%H:%M:%SZ")
-        time_local_eg = time.gmtime(eg.Version.buildTime)
-        if rc == 200 and time_release > time_local_eg:
-            wx.CallAfter(MessageDialog, rel["name"], rel["html_url"])
+        ver = rel["name"].lstrip("v")
+        url = rel["html_url"]
+
+        if (
+            rc == 200 and
+            parse_version(ver) > parse_version(eg.Version.string) and
+            (manually or ver != eg.config.lastUpdateCheckVersion)
+        ):
+            eg.config.lastUpdateCheckVersion = ver
+            wx.CallAfter(MessageDialog, ver, url)
         else:
             if manually:
                 dlg = wx.MessageDialog(

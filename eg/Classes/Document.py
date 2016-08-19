@@ -95,7 +95,7 @@ class Document(object):
         fileDialog = wx.FileDialog(
             self.frame,
             message="",
-            wildcard="EventGhost Tree|*.xml;*.egtree",
+            wildcard="EventGhost Tree (*.egtree; *.xml)|*.egtree;*.xml",
             style=style
         )
         try:
@@ -189,7 +189,10 @@ class Document(object):
     def CmdAddPlugin(self):
         result = eg.AddPluginDialog.GetModalResult(self.frame)
         if result:
-            eg.UndoHandler.NewPlugin(self).Do(result[0])
+            try:
+                eg.UndoHandler.NewPlugin(self).Do(result[0])
+            except eg.Exceptions.PluginLoadError:
+                pass
 
     @eg.AssertInMainThread
     def CmdConfigure(self, item=None, isFirstConfigure=False):

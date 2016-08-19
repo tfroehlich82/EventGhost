@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License along
 # with EventGhost. If not, see <http://www.gnu.org/licenses/>.
 
-import os
 from agithub.GitHub import GitHub
 from collections import OrderedDict
 from os.path import join
@@ -25,25 +24,25 @@ from time import localtime, strftime
 
 # Local imports
 import builder
-from builder.Utils import EscapeMarkdown, NextPage
+from builder.Utils import EscapeMarkdown, IsCIBuild, NextPage
 
 class BuildChangelog(builder.Task):
     """
-    Populate CHANGELOG.TXT with the latest changes from GitHub.
+    Populate CHANGELOG.md with the latest changes from GitHub.
     """
     description = "Build changelog"
 
     def Setup(self):
-        if os.environ.get("USERNAME") == "appveyor":
+        if IsCIBuild():
             self.activated = False
         elif not self.buildSetup.showGui:
             self.activated = bool(self.buildSetup.args.package)
 
     def DoTask(self):
         buildSetup = self.buildSetup
-        changelog_path = join(buildSetup.outputDir, "CHANGELOG.TXT")
+        changelog_path = join(buildSetup.outputDir, "CHANGELOG.md")
         copy2(
-            join(buildSetup.sourceDir, "CHANGELOG.TXT"),
+            join(buildSetup.sourceDir, "CHANGELOG.md"),
             changelog_path
         )
 
@@ -151,11 +150,11 @@ class BuildChangelog(builder.Task):
                 changes.append("\n**{0}:**\n\n".format(title))
                 print "{0}:".format(title)
                 for pr in items:
-                    changes.append("* {0} [#{1}]({2}) ([{3}]({4}))\n".format(
+                    changes.append("* {0} [\#{1}]({2}) ([{3}]({4}))\n".format(
                         EscapeMarkdown(pr["title"]),
                         pr["number"],
                         pr["html_url"],
-                        pr["user"]["login"],
+                        EscapeMarkdown(pr["user"]["login"]),
                         pr["user"]["html_url"],
                     ))
                     print "* {0} #{1} ({2})".format(
@@ -168,7 +167,7 @@ class BuildChangelog(builder.Task):
         if len(changes) == 1:
             text = "\nOnly minor changes in this release.\n"
             changes.append(text)
-            print text
+            print text.lstrip()
 
         # read the existing changelog...
         try:
@@ -187,7 +186,7 @@ class BuildChangelog(builder.Task):
             import wx
             parent = wx.GetApp().GetTopWindow()
 
-            msg = "CHANGELOG.TXT couldn't be written.\n({0})".format(
+            msg = "CHANGELOG.md couldn't be written.\n({0})".format(
                 sys.exc_value
             )
             dlg = wx.MessageDialog(parent, msg, caption="Error",
@@ -196,6 +195,6 @@ class BuildChangelog(builder.Task):
         else:
             outfile.writelines(changes)
             if old_changes:
-                outfile.write('\n---\n\n')
+                outfile.write('\n\n')
                 outfile.write(old_changes)
             outfile.close()

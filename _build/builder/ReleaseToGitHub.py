@@ -58,7 +58,7 @@ class ReleaseToGitHub(builder.Task):
         ref = 'heads/{0}'.format(branch)
         setupFile = 'EventGhost_{0}_Setup.exe'.format(appVer)
         setupPath = join(buildSetup.outputDir, setupFile)
-        chglogFile = "CHANGELOG.TXT"
+        chglogFile = "CHANGELOG.md"
         chglogPath = join(buildSetup.outputDir, chglogFile)
 
         print "reading changelog"
@@ -183,10 +183,10 @@ class ReleaseToGitHub(builder.Task):
             if rc != 201:
                 print "ERROR: couldn't create commit for changelog update."
                 return
-            CommitSha = data['sha']
+            newCommitSha = data['sha']
 
             print "updating reference for branch to new commit"
-            body = {'sha': CommitSha}
+            body = {'sha': newCommitSha}
             rc, data = gh.repos[user][repo].git.refs[ref].patch(body=body)
             if rc != 200:
                 print "ERROR: couldn't update reference ({0}) with new commit.".format(ref)
@@ -198,7 +198,7 @@ class ReleaseToGitHub(builder.Task):
             chgLines = changelog.splitlines(True)
             try:
                 for i in range(1, len(chgLines)):
-                    if chgLines[i].startswith('---'):
+                    if chgLines[i].startswith("## "):
                         break
                     else:
                         relChglog += chgLines[i]
@@ -208,7 +208,7 @@ class ReleaseToGitHub(builder.Task):
 
             print "creating release"
             body = {'tag_name': 'v{0}'.format(appVer),
-                    'target_commitish': commitSha,
+                    'target_commitish': newCommitSha,
                     'name': 'v{0}'.format(appVer),
                     'body': relChglog,
                     #'draft': False,

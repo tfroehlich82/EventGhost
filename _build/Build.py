@@ -45,6 +45,7 @@ class MyBuilder(builder.Builder):
         "isapi",
         "jinja2",
         "PIL",
+        "pkg_resources",
         "pythoncom",
         "pywin32",
         "win32com",
@@ -52,46 +53,48 @@ class MyBuilder(builder.Builder):
     ]
 
     excludeModules = [
-        "lib2to3",
-        "idlelib",
-        "gopherlib",
-        "Tix",
-        "test",
-        "Tkinter",
+        "eg",
+        "_imagingtk",
         "_tkinter",
-        "Tkconstants",
-        "FixTk",
-        "tcl",
-        "turtle",  # another Tkinter module
-
+        "cffi",  # bundled for no reason
+        "comtypes.gen",
+        #"ctypes.macholib",  # seems to be for Apple
+        "curses",
         "distutils.command.bdist_packager",
         "distutils.mwerkscompiler",
-        "curses",
-        #"ctypes.macholib",  # seems to be for Apple
-
+        "FixTk",
+        "FixTk",
+        "gopherlib",
+        "idlelib",
+        "ImageGL",
+        "ImageQt",
+        "ImageTk",  # py2exe seems to hang if not removed
+        "ipaddr",  # bundled for no reason
+        "ipaddress",  # bundled for no reason
+        "lib2to3",
+        "PIL._imagingtk",
+        "PIL.ImageTk",
+        "pyasn1",  # bundles a broken version if not removed
+        "pycparser",  # bundled for no reason
+        "pywin",
+        "simplejson",  # bundled for no reason
+        "tcl",
+        "test",
+        "Tix",
+        "Tkconstants",
+        "tkinter",  # from `future`
+        "Tkinter",
+        "turtle",  # another Tkinter module
+        "WalImageFile",  # odd syntax error in file
+        "win32com.axdebug",
+        "win32com.axscript",
+        "win32com.demos",
+        "win32com.gen_py",
+        "wx.lib.floatcanvas",  # needs NumPy
+        "wx.lib.plot",  # needs NumPy
         "wx.lib.vtk",
         "wx.tools.Editra",
         "wx.tools.XRCed",
-        "wx.lib.plot",  # needs NumPy
-        "wx.lib.floatcanvas",  # needs NumPy
-
-        "ImageTk",  # py2exe seems to hang if not removed
-        "ImageGL",
-        "ImageQt",
-        "WalImageFile",  # odd syntax error in file
-        # and no TCL through PIL
-        "_imagingtk",
-        "PIL._imagingtk",
-        "PIL.ImageTk",
-        "FixTk",
-
-        "win32com.gen_py",
-        "win32com.demos",
-        "win32com.axdebug",
-        "win32com.axscript",
-        "pywin",
-        "comtypes.gen",
-        "eg",
     ]
 
     def BuildInstaller(self):
@@ -108,10 +111,10 @@ class MyBuilder(builder.Builder):
                 ignoreversion=(filename not in SKIP_IF_UNCHANGED),
                 prefix=prefix
             )
-        if exists(join(self.outputDir, "CHANGELOG.TXT")):
-            inno.AddFile(join(self.outputDir, "CHANGELOG.TXT"))
+        if exists(join(self.outputDir, "CHANGELOG.md")):
+            inno.AddFile(join(self.outputDir, "CHANGELOG.md"))
         else:
-            inno.AddFile(join(self.sourceDir, "CHANGELOG.TXT"))
+            inno.AddFile(join(self.sourceDir, "CHANGELOG.md"))
         inno.AddFile(
             join(self.sourceDir, "py%s.exe" % self.pyVersionStr),
             destName="py.exe"
