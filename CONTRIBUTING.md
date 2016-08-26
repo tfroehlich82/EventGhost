@@ -45,7 +45,7 @@ If you're new to Git, we recommend the following:
 
 * Install [TortoiseGit](https://tortoisegit.org/download/) and read through its [Daily Use Guide](https://tortoisegit.org/docs/tortoisegit/tgit-dug.html). TortoiseGit integrates directly into Windows, and you operate it by right-clicking on files and folders in your repo. It's a great Git client for both beginners and experts alike.
 * To get a better feel for Git's command-line tools, run through [GitHub's 15-minute interactive Git tutorial](https://try.github.io/).
-* Read the first three chapters of [*Pro Git*](https://git-scm.com/book). *Pro Git* is the gold standard of Git books, written by GitHub's co-founder, and is available free of charge at the link provided.
+* Read the first three chapters of [*Pro Git*](https://git-scm.com/book). Written by GitHub's co-founder, *Pro Git* is the gold standard of Git books, and is available free of charge at the link provided.
 
 ### Setting up your editor
 
@@ -56,7 +56,7 @@ Before you begin working on EventGhost, please install the following plugins in 
 
 These plugins will help guide you to producing the highest quality code possible. If you're not using `EditorConfig` or your code doesn't fully validate with `flake8`, don't be surprised when your pull request is rejected and you're pointed back to this document.
 
-Still using Notepad or another program without plugin support? Check out [Visual Studio Code](https://code.visualstudio.com/) or [Atom](https://atom.io/), both of which are free and come with full Git integration.
+Still using Notepad or another program without plugin support? Check out [Visual Studio Code](https://code.visualstudio.com/docs/languages/python), which is free, comes with full Git integration, and has a robust Python plugin with debugging(!).
 
 ### Commits count!
 

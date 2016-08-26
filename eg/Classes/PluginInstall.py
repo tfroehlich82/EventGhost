@@ -43,14 +43,6 @@ TEMPLATE = u"""
         <td><b>Version:</b>&nbsp;</td>
         <td>{version}</td>
     </tr>
-    <tr>
-        <td><b>Support:</b>&nbsp;</td>
-        <td>
-            <a href="http://www.eventghost.net/forum/viewforum.php?f=9">
-                Forum Thread
-            </a>
-        </td>
-    </tr>
 </TABLE>
 <P>
 <b>Description:</b>"""
@@ -105,7 +97,7 @@ class PluginInstall(object):
         #if result == wx.ID_CANCEL:
         #    return
         filename = os.path.basename(pluginInfo.path)
-        title = eg.text.MainFrame.Menu.Export.translate(None, "&.")
+        title = eg.text.MainFrame.Menu.Export.replace("&", "").replace(".", "")
         dialog = wx.FileDialog(
             eg.document.frame,
             defaultFile=filename,
@@ -207,7 +199,7 @@ class PluginOverviewDialog(Dialog):
     ):
         Dialog.__init__(
             self,
-            eg.document.frame,
+            None,  #eg.document.frame,
             -1,
             title,
             size=(400, 300),
@@ -247,6 +239,7 @@ class PluginOverviewDialog(Dialog):
 
         self.SetSize((400, 500))
         self.SetMinSize(self.GetSize())
+        self.Center()
 #        self.SetSizerAndFit(mainSizer)
 #        self.Bind(wx.EVT_SIZE, self.OnSize)
 #        self.Layout()

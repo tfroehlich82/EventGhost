@@ -43,7 +43,6 @@ class args:
     hideOnStartup = False
     install = False
     isMain = hasattr(__main__, "isMain")  #splitext(basename(scriptPath))[0].lower() == "eventghost"
-    pluginDir = None
     pluginFile = None
     startupEvent = None
     startupFile = None
@@ -66,7 +65,7 @@ if args.isMain:
         elif arg == '-uninstall':
             for root, dirs, files in os.walk(mainDir):
                 for name in files:
-                    if name.lower().endswith(".pyc"):
+                    if name.lower().endswith((".pyc", ".pyo")):
                         os.remove(join(root, name))
             sys.exit(0)
         elif arg in ('-m', '-multiload'):
@@ -82,8 +81,6 @@ if args.isMain:
         elif arg in ('-p', '-plugin'):
             args.pluginFile = abspath(argvIter.next())
             #args.isMain = False
-        elif arg == '-plugindir':
-            args.plugindir = argvIter.next()
         elif arg == '-configdir':
             args.configDir = argvIter.next()
         elif arg == '-translate':
