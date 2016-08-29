@@ -34,6 +34,17 @@ import builder
 from builder.subprocess2 import Popen
 
 # Exceptions
+class BuildError(Exception):
+    def __init__(self, msg):
+        super(BuildError, self).__init__()
+        self.msg = msg
+
+    def __repr__(self):
+        return self.msg
+
+    def __str__(self):
+        return self.msg
+
 class InvalidVersion(Exception):
     pass
 
@@ -131,7 +142,7 @@ def GetGitHubConfig():
 
     # no entry for 'token' and/or 'user' found in .gitconfig
     if "token" not in gitcfg or "user" not in gitcfg:
-        raise ValueError
+        raise KeyError
 
     # try to get local active branch
     try:
@@ -175,6 +186,8 @@ def GetGitHubConfig():
                         "branch": local_branch if local_branch in
                                           branches else repo["default_branch"]
                     })
+        else:
+            raise ValueError
     return gitcfg
 
 def GetHtmlHelpCompilerPath():
@@ -261,22 +274,17 @@ def GetVersion(buildSetup):
     """
     Get the app version.
     """
-    #print "getting version from GitHub."
-    if buildSetup.gitConfig["token"] and buildSetup.args.version is None:
-        latestVersion = GetLastReleaseOrTagName(buildSetup)
-        def Increment(match):
-            if match.group(1):
-                return str(int(match.group(1)) + 1)
-        newVersion = ParseVersion(re.sub("(\d+)$", Increment, latestVersion))
-        buildSetup.appVersion = newVersion[0]
-        buildSetup.appVersionInfo = newVersion[1]
+    if buildSetup.gitConfig["token"]:
+        if buildSetup.args.version is None:
+            ver = GetLastReleaseOrTagName(buildSetup)
+            def Increment(match):
+                if match.group(1):
+                    return str(int(match.group(1)) + 1)
+            return ParseVersion(re.sub("(\d+)$", Increment, ver))
+        else:
+            return ParseVersion(buildSetup.args.version)
     else:
-        (
-            buildSetup.appVersion,
-            buildSetup.appVersionInfo
-        ) = (
-            ParseVersion(buildSetup.args.version)
-        )
+        return ParseVersion("")
 
 def Is64bitInterpreter():
     """

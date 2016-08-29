@@ -20,6 +20,7 @@ import argparse
 import os
 import sys
 import tempfile
+import threading
 from os.path import abspath, dirname, exists, join
 
 # Local imports
@@ -108,15 +109,17 @@ class Builder(object):
 
         try:
             self.gitConfig = GetGitHubConfig()
-        except:
-            gitWarning = (
-                "WARNING: Can't release to GitHub until you do the following:\n"
+        except Exception as e:
+            msg = (
+                "WARNING: To change version or release to GitHub, you must:\n"
                 "    $ git config --global github.user <your github username>\n"
                 "    $ git config --global github.token <your github token>\n"
                 "To create a token, go to: https://github.com/settings/tokens\n"
             )
+            if type(e) is ValueError:
+                msg = "WARNING: Specified `github.token` is invalid!\n" + msg
             if not IsCIBuild():
-                print gitWarning
+                print msg
             self.gitConfig = {
                 "all_repos": {
                     "EventGhost/EventGhost": {
@@ -183,9 +186,10 @@ class Builder(object):
         self.config = Config(self, join(self.outputDir, "Build.ini"))
         for task in self.tasks:
             task.Setup()
-        GetVersion(self)
+        (self.appVersion, self.appVersionInfo) = GetVersion(self)
         if self.showGui:
             import Gui
             Gui.Main(self)
         else:
-            builder.Tasks.Main(self)
+            thread = threading.Thread(target=builder.Tasks.Main, args=[self])
+            thread.start()
