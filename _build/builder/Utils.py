@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.net/>
+# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.org/>
 #
 # EventGhost is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
@@ -246,7 +246,7 @@ def GetLastReleaseOrTagName(buildSetup):
             for tag in data:
                 if tag['ref'][10:] > lastRelease:
                     lastRelease = tag['ref'][10:]
-        return lastRelease
+        return lastRelease.lstrip("v")
 
 def GetTerminalSize(fallback=(80, 24)):
     """
