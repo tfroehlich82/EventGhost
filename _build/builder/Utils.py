@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.org/>
+# Copyright © 2005-2020 EventGhost Project <http://www.eventghost.net/>
 #
 # EventGhost is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
@@ -123,6 +123,16 @@ def GetGitHubConfig():
     """
     Get GitHub from .gitconfig .
     """
+
+    gitcfg = {}
+    if IsCIBuild():
+        gitcfg['token'] = os.environ["GITHUB_TOKEN"]
+        user, repo = os.environ["APPVEYOR_REPO_NAME"].split('/')
+        gitcfg['user'] = user
+        gitcfg['repo'] = repo
+        gitcfg['branch'] = os.environ["APPVEYOR_REPO_BRANCH"]
+        return gitcfg
+
     from agithub.GitHub import GitHub
     # read .gitconfig
     cfg = expanduser('~\.gitconfig')
@@ -131,7 +141,6 @@ def GetGitHubConfig():
 
     # try to to read github section from .gitconfig
     idx = cfg.index("[github]\n")
-    gitcfg = {}
     for i in range(idx + 1, len(cfg)):
         if cfg[i].strip().startswith('['):
             break
@@ -307,7 +316,7 @@ def IsCIBuild():
     """
     Determine whether or not this is a continuous integration build.
     """
-    return (os.environ.get("USERNAME") == "appveyor")
+    return (os.environ.get("CI", "False").upper() == "TRUE")
 
 def ListDir(path, skip_dirs=[], fullpath=True):
     """

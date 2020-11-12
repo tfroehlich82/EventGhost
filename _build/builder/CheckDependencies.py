@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.org/>
+# Copyright © 2005-2020 EventGhost Project <http://www.eventghost.net/>
 #
 # EventGhost is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
@@ -259,7 +259,7 @@ DEPENDENCIES = [
     ModuleDependency(
         name = "Sphinx",
         module = "sphinx",
-        version = "1.3.5",
+        version = "1.7.5",
     ),
     StacklessDependency(),
     ModuleDependency(

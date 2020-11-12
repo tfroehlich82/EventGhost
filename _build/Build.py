@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of EventGhost.
-# Copyright © 2005-2016 EventGhost Project <http://www.eventghost.org/>
+# Copyright © 2005-2020 EventGhost Project <http://www.eventghost.net/>
 #
 # EventGhost is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
@@ -34,7 +34,7 @@ class MyBuilder(builder.Builder):
     name = "EventGhost"
     description = "EventGhost Automation Tool"
     companyName = "EventGhost Project"
-    copyright = u"Copyright © 2005-2016 EventGhost Project"
+    copyright = u"Copyright © 2005-2020 EventGhost Project"
     mainScript = "EventGhost.pyw"
 
     includeModules = [
@@ -96,6 +96,11 @@ class MyBuilder(builder.Builder):
         "wx.lib.vtk",
         "wx.tools.Editra",
         "wx.tools.XRCed",
+        "wx.lib.pdfwin_old",
+        "wx.lib.pdfviewer",
+        "wx.lib.pubsub"
+        "wx.lib.iewin",
+        "wx.lib.iewin_old"
     ]
 
     def BuildInstaller(self):
